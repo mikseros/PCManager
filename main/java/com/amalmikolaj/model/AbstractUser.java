@@ -1,16 +1,15 @@
 package com.amalmikolaj.model;
 
-import java.util.Date;
 
 public abstract class AbstractUser implements UserInterface{
 
     int id;
     String name;
     String surname;
-    Date dateOfBirth;
+    String dateOfBirth;
     String post;
 
-    AbstractUser(int id, String name, String surname, Date dateOfBirth, String post){
+    AbstractUser(int id, String name, String surname, String dateOfBirth, String post){
 
         this.id = id;
         this.name = name;
@@ -43,11 +42,11 @@ public abstract class AbstractUser implements UserInterface{
 		this.surname = surname;
 	}
 
-	public Date getDateOfBirth() {
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
@@ -61,7 +60,7 @@ public abstract class AbstractUser implements UserInterface{
 
 	@Override
 	public String toString() {
-		return "AbstractUser [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
 				+ ", post=" + post + "]";
 	}
 	

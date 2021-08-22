@@ -1,6 +1,6 @@
 package com.amalmikolaj.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Workstation {
 	
@@ -11,15 +11,16 @@ public class Workstation {
 	private String studentName;
 	private String studentSurname;
 	private String course;
+	private String dateOfBorrow;
 	private boolean cheque;
 	private String returnComment;
-	private Date dateOfBorrow;
+	
 	
 	public Workstation() {
 		
 	}
 	
-	public Workstation(int id, String brand, String model, String tag, String studentName, String studentSurname, String course, boolean cheque, String returnComment, Date dateOfBorrow) {
+	public Workstation(int id, String brand, String model, String tag, String studentName, String studentSurname, String course, String dateOfBorrow, boolean cheque, String returnComment) {
 		this.id = id;
 		this.brand = brand;
 		this.model = model;
@@ -27,9 +28,9 @@ public class Workstation {
 		this.studentName = studentName;
 		this.studentSurname = studentSurname;
 		this.course = course;
+		this.dateOfBorrow = dateOfBorrow;
 		this.cheque = cheque;
 		this.returnComment = returnComment;
-		this.dateOfBorrow = dateOfBorrow;
 	}
 
 	public int getId() {
@@ -104,22 +105,28 @@ public class Workstation {
 		this.returnComment = returnComment;
 	}
 
-	public Date getDateOfBorrow() {
+	public String getDateOfBorrow() {
 		return dateOfBorrow;
 	}
 
-	public void setDateOfBorrow(Date dateOfBorrow) {
+	public void setDateOfBorrow(String dateOfBorrow) {
 		this.dateOfBorrow = dateOfBorrow;
 	}
 
+	
+	
 	@Override
 	public String toString() {
-		return "Workstation [id=" + id + ", brand=" + brand + ", model=" + model + ", tag=" + tag + ", studentName="
-				+ studentName + ", studentSurname=" + studentSurname + ", course=" + course + ", cheque=" + cheque
-				+ ", returnComment=" + returnComment + ", dateOfBorrow=" + dateOfBorrow + "]";
+		return "\nWorkstation [id=" + id + ", brand=" + brand + ", model=" + model + ", tag=" + tag + ", studentName="
+				+ studentName + ", studentSurname=" + studentSurname + ", course=" + course + ", dateOfBorrow="
+				+ dateOfBorrow + ", cheque=" + cheque + ", returnComment=" + returnComment + "]";
 	}
-	
+
 	public boolean isAvailable() {
-		return false;
+		if(!(getStudentName() == null)&&(getStudentSurname()==null)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

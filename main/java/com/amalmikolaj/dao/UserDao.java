@@ -1,13 +1,11 @@
 package com.amalmikolaj.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.amalmikolaj.model.User;
-import com.amalmikolaj.model.Workstation;
 
 public class UserDao {
 
@@ -19,13 +17,13 @@ public class UserDao {
 
 	public User getUserById(int id) {
 		User user = null;
-		String userQuery = ("SELECT * FROM user WHERE id = ?;");
+		String userQuery = ("SELECT * FROM user WHERE User_id = ?;");
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
 			}
 
 			ps.close();
@@ -47,7 +45,7 @@ public class UserDao {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getSurname());
-			ps.setDate(3, (Date) user.getDateOfBirth());
+			ps.setString(3, user.getDateOfBirth());
 			ps.setString(4, post);
 			ps.executeUpdate();
 			ps.close();
@@ -58,7 +56,7 @@ public class UserDao {
 	}
 
 	public void updateUser(int id, String post) {
-		String SQLString = "UPDATE User SET post = ? WHERE id = ?;";
+		String SQLString = "UPDATE User SET post = ? WHERE User_id = ?;";
 		try {
 			PreparedStatement ps = connection.prepareStatement(SQLString);
 			ps.setString(1, post);
@@ -72,7 +70,7 @@ public class UserDao {
 	}
 	
 	public void deleteUser(int id) {
-		String SQLString = ("DELETE FROM user WHERE id = ?;");
+		String SQLString = ("DELETE FROM user WHERE User_id = ?;");
 		
 		PreparedStatement ps;
 		try {
