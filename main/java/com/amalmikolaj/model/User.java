@@ -1,10 +1,11 @@
 package com.amalmikolaj.model;
 
+import java.util.Date;
 
 public class User extends AbstractUser {
 	
-	public User(int id, String name, String surname, String dateOfBirth, String post) {
-		super(id, name, surname, dateOfBirth, post);
+	public User(int id, String name, String surname, Date dateOfBirth, String post, String password) {
+		super(id, name, surname, dateOfBirth, post, password);
 		// TODO Auto-generated constructor stub
 	}
 

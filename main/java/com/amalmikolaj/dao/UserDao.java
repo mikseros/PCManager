@@ -1,6 +1,7 @@
 package com.amalmikolaj.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class UserDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6));
 			}
 
 			ps.close();
@@ -39,14 +40,15 @@ public class UserDao {
 		Admin, User
 	};
 
-	public void addUser(User user, String post) {
+	public void addUser(User user) {
 		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password) VALUES(?,?,?,?)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getSurname());
-			ps.setString(3, user.getDateOfBirth());
-			ps.setString(4, post);
+			ps.setDate(3, (Date) user.getDateOfBirth());
+			ps.setString(4, user.getPost());
+			ps.setString(5, user.getPassword().toString());
 			ps.executeUpdate();
 			ps.close();
 			connection.close();
