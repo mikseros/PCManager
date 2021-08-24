@@ -8,7 +8,7 @@ class AdminTest {
 
 	@Test
 	void testAdmin() {
-		private final Admin admin = new Admin();
+		
 	}
 
 	@Test

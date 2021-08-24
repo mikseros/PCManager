@@ -3,6 +3,11 @@ package com.amalmikolaj;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import com.amalmikolaj.*;
 import com.amalmikolaj.dao.DaoFactory;
 
@@ -65,6 +70,7 @@ public class LoginFrame extends JFrame implements ActionListener{
 		showPassword.addActionListener(this);
 	}
 	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -76,6 +82,27 @@ public class LoginFrame extends JFrame implements ActionListener{
 			try {
 				DaoFactory dao = new DaoFactory();
 				StringBuilder  pass = dao.getUserDao().EncryptPassword(passwordText);
+				
+				Connection con;
+				String uname = "xxx";
+				String psw = "12345";
+				
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pcmanager", uname/*userText*/, psw/*pass*/);
+				
+				PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT name, password FROM user WHERE name=? AND password=?;");
+				ps.setString(1, userText);
+				ps.setString(2, passwordText);
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()) {
+					JOptionPane.showMessageDialog(this, "Login Successful");
+					NewFrame frame = new NewFrame();
+				} else {
+					JOptionPane.showMessageDialog(this, "Wrong username or password");
+					userTextField.setText("");
+					passwordField.setText("");
+				}
+				
 				} catch (Exception ex){
 					System.out.println(ex.getMessage());
 				};

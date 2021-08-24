@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -15,7 +14,7 @@ class UserTest {
 	
 	@BeforeAll
 	void setUp() {
-		user = new User(7, "Johny", "Bravo", "1989-01-01", "user");
+		
 	}
 	
 	@Test
