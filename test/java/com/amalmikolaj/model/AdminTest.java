@@ -8,7 +8,7 @@ class AdminTest {
 
 	@Test
 	void testAdmin() {
-		fail("Not yet implemented");
+		private final Admin admin = new Admin();
 	}
 
 	@Test

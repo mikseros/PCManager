@@ -1,6 +1,6 @@
 package com.amalmikolaj.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Workstation {
 	
@@ -11,16 +11,15 @@ public class Workstation {
 	private String studentName;
 	private String studentSurname;
 	private String course;
-	private String dateOfBorrow;
 	private boolean cheque;
 	private String returnComment;
-	
+	private Date dateOfBorrow;
 	
 	public Workstation() {
 		
 	}
 	
-	public Workstation(int id, String brand, String model, String tag, String studentName, String studentSurname, String course, String dateOfBorrow, boolean cheque, String returnComment) {
+	public Workstation(int id, String brand, String model, String tag, String studentName, String studentSurname, String course, Date dateOfBorrow, boolean cheque, String returnComment) {
 		this.id = id;
 		this.brand = brand;
 		this.model = model;
@@ -28,9 +27,9 @@ public class Workstation {
 		this.studentName = studentName;
 		this.studentSurname = studentSurname;
 		this.course = course;
-		this.dateOfBorrow = dateOfBorrow;
 		this.cheque = cheque;
 		this.returnComment = returnComment;
+		this.dateOfBorrow = dateOfBorrow;
 	}
 
 	public int getId() {
@@ -105,28 +104,19 @@ public class Workstation {
 		this.returnComment = returnComment;
 	}
 
-	public String getDateOfBorrow() {
+	public Date getDateOfBorrow() {
 		return dateOfBorrow;
 	}
 
-	public void setDateOfBorrow(String dateOfBorrow) {
+	public void setDateOfBorrow(Date dateOfBorrow) {
 		this.dateOfBorrow = dateOfBorrow;
 	}
 
-	
-	
 	@Override
 	public String toString() {
 		return "\nWorkstation [id=" + id + ", brand=" + brand + ", model=" + model + ", tag=" + tag + ", studentName="
-				+ studentName + ", studentSurname=" + studentSurname + ", course=" + course + ", dateOfBorrow="
-				+ dateOfBorrow + ", cheque=" + cheque + ", returnComment=" + returnComment + "]";
+				+ studentName + ", studentSurname=" + studentSurname + ", course=" + course + ", cheque=" + cheque
+				+ ", returnComment=" + returnComment + ", dateOfBorrow=" + dateOfBorrow + "]";
 	}
-
-	public boolean isAvailable() {
-		if(!(getStudentName() == null)&&(getStudentSurname()==null)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+	
 }

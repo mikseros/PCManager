@@ -1,11 +1,16 @@
 package com.amalmikolaj.dao;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.amalmikolaj.model.User;
+import com.amalmikolaj.model.Workstation;
 
 public class UserDao {
 
@@ -17,18 +22,18 @@ public class UserDao {
 
 	public User getUserById(int id) {
 		User user = null;
-		String userQuery = ("SELECT * FROM user WHERE User_id = ?;");
+		String userQuery = ("SELECT * FROM user WHERE user_id = ?;");
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6));
 			}
 
-			ps.close();
-			connection.close();
-			System.out.println(user.toString());
+//			ps.close();
+//			connection.close();
+			//System.out.println(user.toString());
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
@@ -38,25 +43,45 @@ public class UserDao {
 	enum Post {
 		Admin, User
 	};
-
-	public void addUser(User user, String post) {
-		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password) VALUES(?,?,?,?)";
+	public StringBuilder EncryptPassword(String password) {
+		
+	    MessageDigest msg = null;
+	    StringBuilder s = new StringBuilder();
+		try {
+			msg = MessageDigest.getInstance("SHA-256");
+		    byte[] hash = msg.digest(password.getBytes(StandardCharsets.UTF_8));
+		    // convertir bytes en hexadécimal
+		    
+		    for (byte b : hash) {
+		        s.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+		    }
+		    System.out.println(s);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return s;
+		}
+	public void addUser(User user) {
+		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password) VALUES(?,?,?,?,?)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getSurname());
-			ps.setString(3, user.getDateOfBirth());
-			ps.setString(4, post);
+			ps.setDate(3, (Date) user.getDateOfBirth());
+			ps.setString(4,user.getPost());
+			ps.setString(5, EncryptPassword(user.getPassword()).toString());
 			ps.executeUpdate();
-			ps.close();
-			connection.close();
+			//ps.close();
+			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
 	}
 
 	public void updateUser(int id, String post) {
-		String SQLString = "UPDATE User SET post = ? WHERE User_id = ?;";
+		String SQLString = "UPDATE User SET post = ? WHERE user_id = ?;";
 		try {
 			PreparedStatement ps = connection.prepareStatement(SQLString);
 			ps.setString(1, post);
@@ -70,7 +95,7 @@ public class UserDao {
 	}
 	
 	public void deleteUser(int id) {
-		String SQLString = ("DELETE FROM user WHERE User_id = ?;");
+		String SQLString = ("DELETE FROM user WHERE user_id = ?;");
 		
 		PreparedStatement ps;
 		try {
