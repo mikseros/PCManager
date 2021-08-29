@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.amalmikolaj.model.*;
 
 public class WorkstationDao {
@@ -53,7 +55,7 @@ public class WorkstationDao {
 
     }
 	
-	public void addWorkstation(Workstation workStation) throws Exception{
+	public void addWorkstation(Workstation workStation) {
 		
 		
 		String newPC = ("INSERT INTO pc (brand, model, tag, student_Name, student_Surname, course, date_Of_Borrow, cheque, return_Comment) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);");
@@ -95,5 +97,26 @@ public class WorkstationDao {
 			}
 			//ps.close();
 			//connection.close();
+	}
+	
+	public void modifyPC(Workstation w) throws Exception{
+		
+		String modify = "UPDATE pc SET brand = ?, model = ?, tag = ?, "
+				+ "student_Name = ?, student_Surname =?, course = ?, date_Of_Borrow = ?, cheque = ?, return_Comment = ?"
+				+ "WHERE pc_id = ?";
+		PreparedStatement ps = connection.prepareStatement(modify);
+		ps.setString(1, w.getBrand());
+		ps.setString(2, w.getModel());
+		ps.setString(3, w.getTag());
+		ps.setString(4, w.getStudentName());
+		ps.setString(5, w.getStudentSurname());
+		ps.setString(6, w.getCourse());
+		ps.setDate(7, (java.sql.Date) w.getDateOfBorrow());
+		ps.setBoolean(8, w.isCheque());
+		ps.setString(9, w.getReturnComment());
+		ps.setInt(10, w.getId());
+		
+		ps.executeUpdate();
+		ps.close();
 	}
  }

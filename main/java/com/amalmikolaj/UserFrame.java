@@ -139,6 +139,8 @@ public class UserFrame extends JFrame{
 	public void manageModifyWS() {
 		modifyWS.setFocusable(false);
 		modifyWS.setBackground(Color.ORANGE);
+		modifyWS.addActionListener(new savePcModification());
+		
 	}
 	
 	public void manageA() {
@@ -401,6 +403,46 @@ public class UserFrame extends JFrame{
 		}
 	}
 	
+	public class savePcModification implements ActionListener {
+		
+		savePcModification() {
+			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			try {
+				Workstation w = new Workstation();
+				w.setId(Integer.valueOf(editId.getText()));
+				w.setBrand(editBrand.getText());
+				w.setModel(editModel.getText());
+				w.setTag(editTag.getText());
+				w.setStudentName(edStudName.getText());
+				w.setStudentSurname(edStudSurn.getText());
+				w.setCourse(editCourse.getText());
+				w.setDateOfBorrow(Date.valueOf(editDob.getText()));
+				w.setCheque(Boolean.parseBoolean(editCheque.getText()));
+				w.setReturnComment(editRetComm.getText());
+				dao.getWorkstationDao().modifyPC(w);
+			} catch(Exception x) {
+				System.out.println(x.getMessage());
+			}
+			
+			editId.setText("");
+			editBrand.setText("");
+			editModel.setText("");
+			editTag.setText("");
+			edStudName.setText("");
+			edStudSurn.setText("");
+			editCourse.setText("");
+			editDob.setText("");
+			editCheque.setText("");
+			editRetComm.setText("");
+			JOptionPane.showMessageDialog(edStudName, "PC updated!");
+		}	
+	}
+	
 	public class getPcToMod implements ActionListener {
 		
 		getPcToMod() {
@@ -432,7 +474,6 @@ public class UserFrame extends JFrame{
 	public class savePcListen implements ActionListener {
 		
 		savePcListen() {
-			
 			
 		}
 		@Override
