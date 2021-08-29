@@ -115,8 +115,8 @@ public class WorkstationDao {
 		ps.setBoolean(8, w.isCheque());
 		ps.setString(9, w.getReturnComment());
 		ps.setInt(10, w.getId());
-		
 		ps.executeUpdate();
 		ps.close();
+		JOptionPane.showMessageDialog(null, "Update successful!");
 	}
  }

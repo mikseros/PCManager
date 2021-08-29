@@ -72,7 +72,7 @@ public class UserFrame extends JFrame{
 	JLabel editChequeL = new JLabel("Cheque: ");
 	JLabel editRetCommL = new JLabel("Return comment: ");
 	
-	JTextField editId = new JTextField();
+	JTextField editId = new JTextField("0");
 	JTextField editBrand = new JTextField();
 	JTextField editModel = new JTextField();
 	JTextField editTag = new JTextField();
@@ -429,7 +429,7 @@ public class UserFrame extends JFrame{
 				System.out.println(x.getMessage());
 			}
 			
-			editId.setText("");
+			editId.setText("0");
 			editBrand.setText("");
 			editModel.setText("");
 			editTag.setText("");
@@ -439,7 +439,7 @@ public class UserFrame extends JFrame{
 			editDob.setText("");
 			editCheque.setText("");
 			editRetComm.setText("");
-			JOptionPane.showMessageDialog(edStudName, "PC updated!");
+			
 		}	
 	}
 	
