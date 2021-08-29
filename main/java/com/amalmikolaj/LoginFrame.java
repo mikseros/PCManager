@@ -1,31 +1,30 @@
 package com.amalmikolaj;
 
 import javax.swing.*;
+
+import com.amalmikolaj.dao.DaoFactory;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import com.amalmikolaj.*;
-import com.amalmikolaj.dao.DaoFactory;
 
 public class LoginFrame extends JFrame implements ActionListener{
 	
 	Container container = getContentPane();
-	JLabel userLabel = new JLabel("USERNAME");
+	JLabel userLabel = new JLabel("Your e-mail");
 	JLabel passwordLabel = new JLabel("PASSWORD");
-	JTextField userTextField = new JTextField();
-	JPasswordField passwordField = new JPasswordField();
+	public JTextField userTextField = new JTextField();
+	public JPasswordField passwordField = new JPasswordField();
 	JButton loginButton = new JButton("LOGIN");
 	JButton resetButton = new JButton("RESET");
 	JCheckBox showPassword = new JCheckBox("SHOW PASSWORD");
+	Connection con;
+	DaoFactory dao = new DaoFactory();
 	
-	
-	
-	
-	LoginFrame() {
+	public LoginFrame() {
 		
 		this.setTitle("PCManager Login");
 		this.setVisible(true);
@@ -70,43 +69,35 @@ public class LoginFrame extends JFrame implements ActionListener{
 		showPassword.addActionListener(this);
 	}
 	
+	private StringBuilder EncryptPassword(String password) {
+		
+	   MessageDigest msg = null;
+	   StringBuilder s = new StringBuilder();
+	   try {
+		msg = MessageDigest.getInstance("SHA-256");
+		   byte[] hash = msg.digest(password.getBytes(StandardCharsets.UTF_8));
+		   // convertir bytes en hexadécimal
+		    
+		   for (byte b : hash) {
+		       s.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+		   }
+		    
+	   } catch (NoSuchAlgorithmException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	   }
+		
+	   return s;
+	}
+	
+	
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e){
 		
 		if(e.getSource()==loginButton) {
-			String userText;
-			String passwordText;
-			userText = userTextField.getText();
-			passwordText = passwordField.getText();
-			try {
-				DaoFactory dao = new DaoFactory();
-				StringBuilder  pass = dao.getUserDao().EncryptPassword(passwordText);
-				
-				Connection con;
-				String uname = "xxx";
-				String psw = "12345";
-				
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pcmanager", uname/*userText*/, psw/*pass*/);
-				
-				PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT name, password FROM user WHERE name=? AND password=?;");
-				ps.setString(1, userText);
-				ps.setString(2, passwordText);
-				ResultSet rs = ps.executeQuery();
-				if(rs.next()) {
-					JOptionPane.showMessageDialog(this, "Login Successful");
-					NewFrame frame = new NewFrame();
-				} else {
-					JOptionPane.showMessageDialog(this, "Wrong username or password");
-					userTextField.setText("");
-					passwordField.setText("");
-				}
-				
-				} catch (Exception ex){
-					System.out.println(ex.getMessage());
-				};
-			
+			dao.getUserDao().login(this);
+			dao.getUserDao().checkPost(this);
 		}
 		
 		if(e.getSource()==resetButton) {
@@ -120,10 +111,7 @@ public class LoginFrame extends JFrame implements ActionListener{
 			} else {
 				passwordField.setEchoChar('*');
 			}
-		}
-		
-		
+		}	
 	}
-
 
 }

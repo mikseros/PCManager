@@ -9,8 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
+import com.amalmikolaj.UserFrame;
+import com.amalmikolaj.LoginFrame;
 import com.amalmikolaj.model.User;
-import com.amalmikolaj.model.Workstation;
 
 public class UserDao {
 
@@ -28,7 +31,7 @@ public class UserDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
 			}
 
 //			ps.close();
@@ -43,7 +46,7 @@ public class UserDao {
 	enum Post {
 		Admin, User
 	};
-	public StringBuilder EncryptPassword(String password) {
+	private StringBuilder EncryptPassword(String password) {
 		
 	    MessageDigest msg = null;
 	    StringBuilder s = new StringBuilder();
@@ -55,7 +58,7 @@ public class UserDao {
 		    for (byte b : hash) {
 		        s.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 		    }
-		    System.out.println(s);
+		    
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +67,7 @@ public class UserDao {
 		return s;
 		}
 	public void addUser(User user) {
-		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password) VALUES(?,?,?,?,?)";
+		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password, mailAdress) VALUES(?,?,?,?,?)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setString(1, user.getName());
@@ -72,6 +75,7 @@ public class UserDao {
 			ps.setDate(3, (Date) user.getDateOfBirth());
 			ps.setString(4,user.getPost());
 			ps.setString(5, EncryptPassword(user.getPassword()).toString());
+			ps.setString(6, user.getEmail());
 			ps.executeUpdate();
 			//ps.close();
 			//connection.close();
@@ -88,7 +92,7 @@ public class UserDao {
 			ps.setInt(2, id);
 			ps.executeUpdate();
 			ps.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
@@ -103,10 +107,60 @@ public class UserDao {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 			ps.close();
-			connection.close();
+			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
 		
+	}
+	
+	public void login(LoginFrame frame) {
+		try {
+			String passwordText = frame.passwordField.getText();
+			
+			try {
+				
+				StringBuilder  pass = EncryptPassword(passwordText);
+				PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT mailAdress, password FROM user WHERE mailAdress=? AND password=?;");
+				ps.setString(1, frame.userTextField.getText());
+				ps.setString(2, frame.passwordField.getText());
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()) {
+					frame.setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(frame, "Wrong username or password");
+					frame.userTextField.setText("");
+					frame.passwordField.setText("");
+				}
+			
+			} catch (Exception ex){
+				System.out.println(ex.getMessage());
+		};
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+	
+	public void checkPost(LoginFrame frame) {
+		
+		try {
+			
+			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT post FROM user WHERE mailAdress = ?;");
+			ps.setString(1, frame.userTextField.getText());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				switch(rs.getString("post")) {
+				case "user":
+					UserFrame uFrame = new UserFrame();
+					uFrame.setVisible(true);
+					break;
+				case "admin":
+					JOptionPane.showMessageDialog(frame, "Admin panel in progress");
+					break;
+				}
+			}
+		} catch (Exception ex){
+			System.out.println(ex.getMessage());
+		};
 	}
 }

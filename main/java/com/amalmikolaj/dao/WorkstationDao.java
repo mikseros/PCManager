@@ -31,7 +31,7 @@ public class WorkstationDao {
 				rs.getString(6), rs.getString(7), rs.getDate(8), rs.getBoolean(9), rs.getString(10));
 		}
 		ps.close();
-		connection.close();
+		//connection.close();
 		//System.out.println(w.toString());
 		return w;
 	}
@@ -48,7 +48,7 @@ public class WorkstationDao {
             PCList.add(w);
         }
         st.close();
-        connection.close();
+        //connection.close();
         return PCList;
 
     }
@@ -56,7 +56,7 @@ public class WorkstationDao {
 	public void addWorkstation(Workstation workStation) throws Exception{
 		
 		
-		String newPC = ("INSERT INTO pc (brand, model, tag, student_Name, student_Surname, course, cheque, return_Comment, date_Of_Borrow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		String newPC = ("INSERT INTO pc (brand, model, tag, student_Name, student_Surname, course, date_Of_Borrow, cheque, return_Comment) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		try
 		{
 		PreparedStatement ps = connection.prepareStatement(newPC);
@@ -65,10 +65,10 @@ public class WorkstationDao {
 		ps.setString(3, workStation.getTag());
 		ps.setString(4, workStation.getStudentName());
 		ps.setString(5, workStation.getStudentSurname());
-		ps.setString(6, workStation.getStudentSurname());
-		ps.setBoolean(7, workStation.isCheque());
-		ps.setString(8, workStation.getReturnComment());
-		ps.setDate(9, (java.sql.Date) workStation.getDateOfBorrow());
+		ps.setString(6, workStation.getCourse());
+		ps.setDate(7, (java.sql.Date) workStation.getDateOfBorrow());
+		ps.setBoolean(8, workStation.isCheque());
+		ps.setString(9, workStation.getReturnComment());
 		
 		ps.executeUpdate();
 		} catch(SQLException exception) {

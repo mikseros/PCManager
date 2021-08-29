@@ -1,8 +1,5 @@
 package com.amalmikolaj.model;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 public abstract class AbstractUser implements UserInterface{
@@ -13,10 +10,11 @@ public abstract class AbstractUser implements UserInterface{
     Date dateOfBirth;
     String post;
     String password;
+    String email;
     
 	
 
-    AbstractUser(int id, String name, String surname, Date dateOfBirth, String post, String password){
+    AbstractUser(int id, String name, String surname, Date dateOfBirth, String post, String password, String email){
 
         this.id = id;
         this.name = name;
@@ -24,7 +22,16 @@ public abstract class AbstractUser implements UserInterface{
         this.dateOfBirth = dateOfBirth;
         this.post = post;
         this.password = password;
+        this.email = email;
     }
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getPassword() {
 		return password;
@@ -76,9 +83,11 @@ public abstract class AbstractUser implements UserInterface{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
-				+ ", post=" + post + ", password="+password+ "]";
+		return "AbstractUser [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+				+ ", post=" + post + ", password=" + password + ", email=" + email + "]";
 	}
+
+	
 	
 
 }

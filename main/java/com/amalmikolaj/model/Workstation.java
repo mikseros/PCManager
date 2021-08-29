@@ -19,7 +19,8 @@ public class Workstation {
 		
 	}
 	
-	public Workstation(int id, String brand, String model, String tag, String studentName, String studentSurname, String course, Date dateOfBorrow, boolean cheque, String returnComment) {
+	public Workstation(int id, String brand, String model, String tag, String studentName, 
+		String studentSurname, String course, Date dateOfBorrow, boolean cheque, String returnComment) {
 		this.id = id;
 		this.brand = brand;
 		this.model = model;

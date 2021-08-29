@@ -10,11 +10,16 @@ public class DaoFactory {
 	private String uname = "xxx";
 	private String pass = "12345";
 	
-	public DaoFactory() throws SQLException, ClassNotFoundException{
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		this.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pcmanager", uname, pass);
+	public DaoFactory() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			this.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pcmanager", uname, pass);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
 	}
-	
+
 	public UserDao getUserDao() {
 		 return new UserDao(con);
 	}
