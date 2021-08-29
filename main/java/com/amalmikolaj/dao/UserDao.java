@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import com.amalmikolaj.UserFrame;
 import com.amalmikolaj.LoginFrame;
 import com.amalmikolaj.model.User;
+import com.amalmikolaj.model.Workstation;
 
 public class UserDao {
 
@@ -37,6 +38,23 @@ public class UserDao {
 //			ps.close();
 //			connection.close();
 			//System.out.println(user.toString());
+		} catch (SQLException exception) {
+			System.out.println(exception.getMessage());
+		}
+		return user;
+	}
+	
+	public User getUserByMail(String mail) {
+		User user = null;
+		String userQuery = ("SELECT * FROM user WHERE mailAdress = ?;");
+		try {
+			PreparedStatement ps = connection.prepareStatement(userQuery);
+			ps.setString(1, mail);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
+			}
+
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
@@ -77,13 +95,31 @@ public class UserDao {
 			ps.setString(5, EncryptPassword(user.getPassword()).toString());
 			ps.setString(6, user.getEmail());
 			ps.executeUpdate();
-			//ps.close();
+			ps.close();
 			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
 	}
-
+	
+	public void modifyUser(User user, String mail) throws Exception{
+		
+			String modify = "UPDATE user SET name = ?, surname = ?, date_of_birth = ?, "
+					+ "post = ?, password =?, mailAdress = ? WHERE mailAdress = ?";
+			PreparedStatement ps = connection.prepareStatement(modify);
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getSurname());
+			ps.setDate(3, (java.sql.Date) user.getDateOfBirth());
+			ps.setString(4, user.getPost());
+			ps.setString(5, EncryptPassword(user.getPassword()).toString());
+			ps.setString(6, user.getEmail());
+			ps.setString(7, mail);
+			ps.executeUpdate();
+			ps.close();
+			JOptionPane.showMessageDialog(null, "Update successful!");
+	}
+	
+	
 	public void updateUser(int id, String post) {
 		String SQLString = "UPDATE User SET post = ? WHERE user_id = ?;";
 		try {
@@ -123,7 +159,8 @@ public class UserDao {
 				StringBuilder  pass = EncryptPassword(passwordText);
 				PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT mailAdress, password FROM user WHERE mailAdress=? AND password=?;");
 				ps.setString(1, frame.userTextField.getText());
-				ps.setString(2, frame.passwordField.getText());
+				ps.setString(2, pass.toString());
+				//frame.passwordField.getText()
 				ResultSet rs = ps.executeQuery();
 				if(rs.next()) {
 					frame.setVisible(false);
@@ -151,7 +188,7 @@ public class UserDao {
 			while(rs.next()) {
 				switch(rs.getString("post")) {
 				case "user":
-					UserFrame uFrame = new UserFrame();
+					UserFrame uFrame = new UserFrame(frame.userTextField.getText());
 					uFrame.setVisible(true);
 					break;
 				case "admin":
@@ -163,4 +200,5 @@ public class UserDao {
 			System.out.println(ex.getMessage());
 		};
 	}
+
 }

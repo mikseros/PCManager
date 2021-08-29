@@ -12,7 +12,9 @@ public abstract class AbstractUser implements UserInterface{
     String password;
     String email;
     
-	
+	AbstractUser() {
+		
+	}
 
     AbstractUser(int id, String name, String surname, Date dateOfBirth, String post, String password, String email){
 

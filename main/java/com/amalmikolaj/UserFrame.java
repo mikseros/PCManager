@@ -7,12 +7,15 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
+import com.amalmikolaj.model.User;
 
 public class UserFrame extends JFrame{
+	String mail ;
 	
+	
+	DefaultListModel<Workstation>listModel = new DefaultListModel<Workstation>();
 	ArrayList<Workstation> workstationList = new ArrayList<Workstation>();
 	JScrollPane workstationListScrolling = new JScrollPane();
 	DaoFactory dao = new DaoFactory();
@@ -48,11 +51,13 @@ public class UserFrame extends JFrame{
 	JTextField dateOfBirth = new JTextField();
 	JTextField post = new JTextField();
 	JTextField password = new JTextField();
+	JTextField email = new JTextField();
 	JLabel userNameL = new JLabel();
 	JLabel uSurnameL = new JLabel();
 	JLabel dobL = new JLabel();
 	JLabel postL = new JLabel();
 	JLabel passL = new JLabel();
+	JLabel emailL = new JLabel();
 	JButton modifyUser = new JButton();
 	JPanel panelA = new JPanel();
 	JPanel panelB = new JPanel();
@@ -87,6 +92,8 @@ public class UserFrame extends JFrame{
 	
 	JButton selectPcToModify = new JButton("Modify Workstation");
 	JPanel selectPcButP = new JPanel();
+	JButton refreshListButton = new JButton("List Refresh");
+	JPanel refreshListButtonPanel = new JPanel();
 	
 	
 	public void manageE() {
@@ -101,14 +108,27 @@ public class UserFrame extends JFrame{
 			System.out.println(e.getMessage());
 		}
 		
+		
 		JList<Workstation> workstationJList = new JList<Workstation>(new Vector<Workstation>(workstationList));
+		//workstationJList.setModel(listModel);
 		workstationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         workstationListScrolling = new JScrollPane(workstationJList);
         workstationListScrolling.setSize(800, 150);
         panelE.add(workstationListScrolling, BorderLayout.CENTER);
+	}
+	
+	public void refreshList() {
+		try {
+			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
+				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
+	
 	public void manageF() {
 		panelF.setSize(800, 450);
 		panelF.setLayout(new GridLayout(22, 2));
@@ -140,7 +160,6 @@ public class UserFrame extends JFrame{
 		modifyWS.setFocusable(false);
 		modifyWS.setBackground(Color.ORANGE);
 		modifyWS.addActionListener(new savePcModification());
-		
 	}
 	
 	public void manageA() {
@@ -165,6 +184,7 @@ public class UserFrame extends JFrame{
 		panelC.add(addButtonPanel);
 		panelC.add(editButtonPanel);
 		panelC.add(selectPcButP);
+		panelC.add(refreshListButtonPanel);
 		
 	}
 	public void manageD() {
@@ -187,6 +207,18 @@ public class UserFrame extends JFrame{
 		selectPcToModify.setBackground(Color.YELLOW);
 		selectPcToModify.setFocusable(false);
 		selectPcToModify.addActionListener(new getPcToMod());
+		
+	}
+	
+	public void manageRefreshListButtonPanel() {
+		refreshListButtonPanel.setSize(200, 50);
+		refreshListButton.setBackground(Color.pink);
+		refreshListButton.setFocusable(false);
+		refreshListButton.addActionListener(e -> {
+			//listModel.removeAllElements();
+			//listModel.addAll(workstationList);
+		});
+		refreshListButtonPanel.add(refreshListButton);
 	}
 	
 	public void manageSelectPcButP() {
@@ -274,6 +306,8 @@ public class UserFrame extends JFrame{
 		editProfilePanel.add(post);
 		editProfilePanel.add(passL);
 		editProfilePanel.add(password);
+		editProfilePanel.add(emailL);
+		editProfilePanel.add(email);
 		editProfilePanel.add(modifyUser);
 		editProfilePanel.setVisible(false);
 		
@@ -284,110 +318,117 @@ public class UserFrame extends JFrame{
 		editIdL.setForeground(Color.RED);
 		
 		name.setEditable(true);
-		name.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		name.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		name.setSize(600, 50);
 		userNameL.setSize(600, 50);
 		userNameL.setText("Name");
-		userNameL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		userNameL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		surname.setEditable(true);
-		surname.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		surname.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		surname.setSize(600, 50);
 		uSurnameL.setSize(600, 50);
 		uSurnameL.setText("Surname");
-		uSurnameL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		uSurnameL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		dateOfBirth.setEditable(true);
-		dateOfBirth.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		dateOfBirth.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		dateOfBirth.setSize(600, 50);
 		dobL.setSize(600, 50);
 		dobL.setText("Date of birth");
-		dobL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		dobL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		post.setEditable(true);
-		post.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		post.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		post.setSize(600, 50);
 		postL.setSize(600, 50);
 		postL.setText("Post");
-		postL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		postL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		password.setEditable(true);
-		password.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		password.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		password.setSize(600, 50);
 		passL.setSize(600, 50);
 		passL.setText("Password");
-		passL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		passL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
+		
+		email.setEditable(true);
+		email.setFont(new Font("Mv Boli", Font.PLAIN, 15));
+		email.setSize(600, 50);
+		emailL.setSize(600, 50);
+		emailL.setText("E-Mail");
+		emailL.setFont(new Font("Mv Boli", Font.PLAIN, 13));
 		
 		brand.setEditable(true);
-		brand.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		brand.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		brand.setSize(600, 50);
 		brandLabel.setSize(600, 50);
 		brandLabel.setText("Brand");
-		brandLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		brandLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		model.setEditable(true);
-		model.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		model.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		model.setSize(600, 50);
 		modelLabel.setSize(600, 50);
 		modelLabel.setText("Model");
-		modelLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		modelLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		tag.setEditable(true);
-		tag.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		tag.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		tag.setSize(600, 50);
 		tagLabel.setSize(600, 50);
 		tagLabel.setText("Service Tag");
-		tagLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		tagLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		studentName.setEditable(true);
-		studentName.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		studentName.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		studentName.setSize(600, 50);
 		nameLabel.setSize(600, 50);
 		nameLabel.setText("Student Name");
-		nameLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		nameLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		studentSurname.setEditable(true);
-		studentSurname.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		studentSurname.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		studentSurname.setSize(600, 50);
 		surnameLabel.setSize(600, 50);
 		surnameLabel.setText("Student Surname");
-		surnameLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		surnameLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		course.setEditable(true);
-		course.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		course.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		course.setSize(600, 50);
 		courseLabel.setSize(600, 50);
 		courseLabel.setText("Course");
-		courseLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		courseLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		dateOfBorrow.setEditable(true);
-		dateOfBorrow.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		dateOfBorrow.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		dateOfBorrow.setSize(600, 50);
 		dateLabel.setSize(600, 50);
 		dateLabel.setText("Date");
-		dateLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		dateLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		cheque.setEditable(true);
-		cheque.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		cheque.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		cheque.setSize(600, 50);
 		chequeLabel.setSize(600, 50);
 		chequeLabel.setText("Cheque");
-		chequeLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		chequeLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
 		
 		returnComment.setEditable(true);
-		returnComment.setFont(new Font("Mv Boli", Font.PLAIN, 10));
+		returnComment.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		returnComment.setSize(600, 50);
 		commentLabel.setSize(600, 50);
 		commentLabel.setText("Return comment");
-		commentLabel.setFont(new Font("Mv Boli", Font.PLAIN, 13));
+		commentLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 	}
 	
 	public class modifyProfileListen implements ActionListener {
@@ -398,7 +439,27 @@ public class UserFrame extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			
+			try {
+				User user = new User();
+				user.setId(Integer.valueOf(editId.getText()));
+				user.setName(name.getText());
+				user.setSurname(surname.getText());
+				user.setDateOfBirth(Date.valueOf(dateOfBirth.getText()));
+				user.setPost(post.getText());
+				user.setPassword(password.getText());
+				user.setEmail(email.getText());
+				dao.getUserDao().modifyUser(user, mail);
+			} catch(Exception x) {
+				System.out.println(x.getMessage());
+			}
+			
+			//name.setText("");
+			//surname.setText("");
+			//dateOfBirth.setText("");
+			//post.setText("");
+			//password.setText("");
+			//email.setText("");
 			
 		}
 	}
@@ -508,8 +569,22 @@ public class UserFrame extends JFrame{
 		
 	}
 	
-	public UserFrame() {
+	public void getUserInfo() {
 		
+		User u = dao.getUserDao().getUserByMail(mail);
+		name.setText(u.getName());
+		surname.setText(u.getSurname());
+		dateOfBirth.setText(String.valueOf(u.getDateOfBirth()));
+		post.setText(u.getPost());
+		password.setText(u.getPassword());
+		email.setText(u.getEmail());
+		
+	}
+	
+	public UserFrame(String mail) {
+		this.mail = mail;
+		
+		getUserInfo();
 		labelManage();
 		manageAddPcButton();
 		manageProfileButton();
@@ -529,6 +604,7 @@ public class UserFrame extends JFrame{
 		manageModifyWS();
 		manageSelectPcToModifyButton();
 		manageSelectPcButP();
+		manageRefreshListButtonPanel();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");
@@ -537,6 +613,5 @@ public class UserFrame extends JFrame{
 	    this.add(panelA);
 	    this.add(panelB);
 		this.setVisible(true);
-	}
-	
+	}	
 }

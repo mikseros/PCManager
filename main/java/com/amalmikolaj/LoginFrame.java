@@ -3,6 +3,8 @@ package com.amalmikolaj;
 import javax.swing.*;
 
 import com.amalmikolaj.dao.DaoFactory;
+import com.amalmikolaj.model.User;
+import com.amalmikolaj.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,6 +25,7 @@ public class LoginFrame extends JFrame implements ActionListener{
 	JCheckBox showPassword = new JCheckBox("SHOW PASSWORD");
 	Connection con;
 	DaoFactory dao = new DaoFactory();
+	User u;
 	
 	public LoginFrame() {
 		
@@ -90,14 +93,13 @@ public class LoginFrame extends JFrame implements ActionListener{
 	   return s;
 	}
 	
-	
-	
 	@Override
 	public void actionPerformed(ActionEvent e){
 		
 		if(e.getSource()==loginButton) {
 			dao.getUserDao().login(this);
 			dao.getUserDao().checkPost(this);
+			//u = dao.getUserDao().getUserByMail(userTextField.getText());
 		}
 		
 		if(e.getSource()==resetButton) {
@@ -113,5 +115,6 @@ public class LoginFrame extends JFrame implements ActionListener{
 			}
 		}	
 	}
+	
 
 }

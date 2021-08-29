@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class User extends AbstractUser {
 	
+	public User() {
+		
+	}
+	
 	public User(int id, String name, String surname, Date dateOfBirth, String post, String password, String email) {
 		super(id, name, surname, dateOfBirth, post, password, email);
 		// TODO Auto-generated constructor stub
