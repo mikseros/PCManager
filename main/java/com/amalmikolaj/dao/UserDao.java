@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.amalmikolaj.UserFrame;
+import com.amalmikolaj.AdminFrame;
 import com.amalmikolaj.LoginFrame;
 import com.amalmikolaj.model.User;
 import com.amalmikolaj.model.Workstation;
@@ -192,7 +193,8 @@ public class UserDao {
 					uFrame.setVisible(true);
 					break;
 				case "admin":
-					JOptionPane.showMessageDialog(frame, "Admin panel in progress");
+					AdminFrame aFrame = new AdminFrame(frame.userTextField.getText());
+					aFrame.setVisible(true);
 					break;
 				}
 			}

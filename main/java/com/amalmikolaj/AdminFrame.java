@@ -11,7 +11,7 @@ import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
 
-public class UserFrame extends JFrame{
+public class AdminFrame extends JFrame{
 	String mail ;
 	
 	
@@ -94,6 +94,10 @@ public class UserFrame extends JFrame{
 	JPanel selectPcButP = new JPanel();
 	JButton refreshListButton = new JButton("List Refresh");
 	JPanel refreshListButtonPanel = new JPanel();
+	
+	JButton adminOptionsButton = new JButton();
+	JPanel adminOptionsButtonPanel = new JPanel();
+	
 	
 	
 	public void manageE() {
@@ -185,6 +189,7 @@ public class UserFrame extends JFrame{
 		panelC.add(editButtonPanel);
 		panelC.add(selectPcButP);
 		panelC.add(refreshListButtonPanel);
+		panelC.add(adminOptionsButtonPanel);
 		
 	}
 	public void manageD() {
@@ -222,6 +227,20 @@ public class UserFrame extends JFrame{
 		});
 		refreshListButtonPanel.add(refreshListButton);
 	}
+	
+	//Managingv "Admin Options" button.
+	public void ManageAdminOptionsButton() {
+		adminOptionsButton.setText("Admin Options >>>");
+		adminOptionsButton.setBackground(Color.WHITE);
+	}
+	
+	//Managing the panel which hold "Admin Options" button.
+	public void ManageAdminOptionsButtonPanel() {
+		adminOptionsButtonPanel.setSize(200, 50);
+		adminOptionsButtonPanel.add(adminOptionsButton);
+	}
+	
+	
 	// Managing the panel which hold the button.
 	public void manageSelectPcButP() {
 		selectPcButP.setSize(200, 50);
@@ -354,7 +373,7 @@ public class UserFrame extends JFrame{
 		dobL.setText("Date of birth");
 		dobL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
-		post.setEditable(false);
+		post.setEditable(true);
 		post.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		post.setSize(600, 50);
 		postL.setSize(600, 50);
@@ -597,7 +616,7 @@ public class UserFrame extends JFrame{
 		
 	}
 	// Constructor of the frame
-	public UserFrame(String mail) {
+	public AdminFrame(String mail) {
 		this.mail = mail;
 		
 		getUserInfo();
@@ -621,6 +640,8 @@ public class UserFrame extends JFrame{
 		manageSelectPcToModifyButton();
 		manageSelectPcButP();
 		manageRefreshListButtonPanel();
+		ManageAdminOptionsButton();
+		ManageAdminOptionsButtonPanel();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");
