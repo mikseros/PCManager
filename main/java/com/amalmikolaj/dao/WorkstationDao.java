@@ -119,4 +119,16 @@ public class WorkstationDao {
 		ps.close();
 		JOptionPane.showMessageDialog(null, "Update successful!");
 	}
- }
+ 
+
+	public void deletePC(Workstation w) {
+		try {
+			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("UPDATE pc SET isDeleted = 1 WHERE pc_id = ?;");
+			ps.setInt(1, w.getId());
+			ps.executeUpdate();
+			JOptionPane.showMessageDialog(null, "Workstation deleted!");
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+}

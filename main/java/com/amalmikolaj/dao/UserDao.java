@@ -106,18 +106,31 @@ public class UserDao {
 	public void modifyUser(User user, String mail) throws Exception{
 		
 			String modify = "UPDATE user SET name = ?, surname = ?, date_of_birth = ?, "
-					+ "post = ?, password =?, mailAdress = ? WHERE mailAdress = ?";
+					+ "post = ?, mailAdress = ? WHERE mailAdress = ?";
 			PreparedStatement ps = connection.prepareStatement(modify);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getSurname());
 			ps.setDate(3, (java.sql.Date) user.getDateOfBirth());
 			ps.setString(4, user.getPost());
-			ps.setString(5, EncryptPassword(user.getPassword()).toString());
-			ps.setString(6, user.getEmail());
-			ps.setString(7, mail);
+			//ps.setString(5, EncryptPassword(user.getPassword()).toString());
+			ps.setString(5, user.getEmail());
+			ps.setString(6, mail);
 			ps.executeUpdate();
 			ps.close();
 			JOptionPane.showMessageDialog(null, "Update successful!");
+	}
+	
+	public void modifyPassword(User user, String mail) throws Exception {
+		
+		String modPass = "UPDATE user SET password = ? WHERE mailAdress = ?;";
+		PreparedStatement ps = connection.prepareStatement(modPass);
+		ps.setString(1, EncryptPassword(user.getPassword()).toString());
+		ps.setString(2, mail);
+		
+		ps.executeUpdate();
+		ps.close();
+		JOptionPane.showMessageDialog(null, "Password update successful!");
+		
 	}
 	
 	
@@ -161,7 +174,7 @@ public class UserDao {
 				PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT mailAdress, password FROM user WHERE mailAdress=? AND password=?;");
 				ps.setString(1, frame.userTextField.getText());
 				ps.setString(2, pass.toString());
-				//frame.passwordField.getText()
+				//frame.passwordField.getText()pass.toString()
 				ResultSet rs = ps.executeQuery();
 				if(rs.next()) {
 					frame.setVisible(false);
@@ -201,6 +214,17 @@ public class UserDao {
 		} catch (Exception ex){
 			System.out.println(ex.getMessage());
 		};
+	}
+	
+	public void deleteUser(User user) {
+		try {
+			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("UPDATE user SET isDeleted = 1 WHERE user_id = ?;");
+			ps.setInt(1, user.getId());
+			ps.executeUpdate();
+			JOptionPane.showMessageDialog(null, "User deleted!");
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
 	}
 
 }

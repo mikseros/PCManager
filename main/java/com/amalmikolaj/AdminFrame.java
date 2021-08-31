@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import com.amalmikolaj.UserFrame.editPassword;
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
@@ -88,6 +90,26 @@ public class AdminFrame extends JFrame{
 	JTextField editCheque = new JTextField();
 	JTextField editRetComm = new JTextField();
 	
+	JPanel panelG = new JPanel();
+	
+	//TextFields and Labels for user edition panel
+	JLabel editUserIdL = new JLabel("Type in the ID of USER to modify (Num). Then click 'Modify WOrkstation'.\n After getting data you can modify and save it by 'Save Modification'");
+	JLabel editUserNameL = new JLabel("Name: ");
+	JLabel editUserSurnameL = new JLabel("Surname: ");
+	JLabel editUserDobL = new JLabel("Date of birth: ");
+	JLabel editUserPostL = new JLabel("Post: ");
+	JLabel editUserPassL = new JLabel("Password: ");
+	JLabel editUserMailL = new JLabel("E-mail: ");
+	
+	JTextField editUserId = new JTextField("0");
+	JTextField editUserName = new JTextField();
+	JTextField editUserSurname = new JTextField();
+	JTextField editUserDob = new JTextField();
+	JTextField editUserPost = new JTextField();
+	JTextField editUserPass = new JTextField();
+	JTextField editUserMail = new JTextField();
+
+	
 	JButton modifyWS = new JButton("Save Modification");
 	
 	JButton selectPcToModify = new JButton("Modify Workstation");
@@ -97,6 +119,25 @@ public class AdminFrame extends JFrame{
 	
 	JButton adminOptionsButton = new JButton();
 	JPanel adminOptionsButtonPanel = new JPanel();
+	
+	JButton deletePcButton = new JButton();
+	JPanel deletePcButtonPanel = new JPanel();
+	
+	JButton showUsersButton = new JButton();
+	JPanel showUsersButtonPanel = new JPanel();
+	
+	JButton modifyUserButton = new JButton();
+	JPanel modifyUserButtonPanel = new JPanel();
+	
+	JButton deleteUserButton = new JButton();
+	JPanel deleteUserButtonPanel = new JPanel();
+	
+	JButton activatePassChangeButton = new JButton();
+	JPanel activatePassChengeButtonPanel = new JPanel();
+	
+	JButton saveNewPassButton = new JButton();
+	JPanel saveNewPassButtonPanel = new JPanel();
+
 	
 	
 	
@@ -159,6 +200,29 @@ public class AdminFrame extends JFrame{
 		panelF.add(modifyWS);
 		panelF.setVisible(true);
 	}
+	// Managing the panel which holds the form for user edition.
+	public void manageG() {
+		panelG.setSize(400, 700);
+		panelG.setLayout(new GridLayout(15, 2));
+		panelG.add(editUserIdL);
+		panelG.add(editUserId);
+		panelG.add(editUserNameL);
+		panelG.add(editUserName);
+		panelG.add(editUserSurnameL);
+		panelG.add(editUserSurname);
+		panelG.add(editUserDobL);
+		panelG.add(editUserDob);
+		panelG.add(editUserPostL);
+		panelG.add(editUserPost);
+		panelG.add(editUserPassL);
+		panelG.add(editUserPass);
+		panelG.add(editUserMailL);
+		panelG.add(editUserMail);
+		
+		panelG.add(modifyWS);
+		panelG.setVisible(true);
+	}
+	
 	// Managing the button for save the modification of workstation.
 	public void manageModifyWS() {
 		modifyWS.setFocusable(false);
@@ -172,6 +236,7 @@ public class AdminFrame extends JFrame{
 		panelA.setLayout(new BorderLayout());
 		panelA.add(panelE, BorderLayout.NORTH);
 		panelA.add(panelF, BorderLayout.CENTER);
+		//panelA.add(panelG, BorderLayout.CENTER);
 	}
 	
 	public void manageB() {
@@ -184,25 +249,31 @@ public class AdminFrame extends JFrame{
 	public void manageC() {
 		
 		panelC.setSize(400, 700);
-		panelC.setLayout(new GridLayout(6, 1));
+		panelC.setLayout(new GridLayout(12, 1));
 		panelC.add(addButtonPanel);
 		panelC.add(editButtonPanel);
 		panelC.add(selectPcButP);
 		panelC.add(refreshListButtonPanel);
+		panelC.add(activatePassChengeButtonPanel);
+		panelC.add(saveNewPassButtonPanel);
 		panelC.add(adminOptionsButtonPanel);
+		panelC.add(deletePcButtonPanel);
+		panelC.add(showUsersButtonPanel);
+		panelC.add(modifyUserButtonPanel);
+		panelC.add(deleteUserButtonPanel);
 		
 	}
 	public void manageD() {
-		
 		panelD.setSize(400, 700);
 		panelD.setLayout(new BorderLayout());
 		panelD.add(addPcPanel, BorderLayout.NORTH);
 		panelD.add(editProfilePanel, BorderLayout.CENTER);
+		//panelD.add(panelG, BorderLayout.NORTH);
 	}
 	// Managing the label with the title.
 	public void labelManage() {
 		label.setSize(800, 100);
-		label.setText("Welcome to PC Manager!");
+		label.setText("Welcome to PC Admin-Manager!");
 		label.setHorizontalAlignment(JLabel.CENTER);
 	    label.setVerticalAlignment(JLabel.CENTER);
 		label.setFont(new Font("Mv Boli", Font.PLAIN, 30));
@@ -228,10 +299,17 @@ public class AdminFrame extends JFrame{
 		refreshListButtonPanel.add(refreshListButton);
 	}
 	
-	//Managingv "Admin Options" button.
+	//Managing "Admin Options" button.
 	public void ManageAdminOptionsButton() {
 		adminOptionsButton.setText("Admin Options >>>");
 		adminOptionsButton.setBackground(Color.WHITE);
+		adminOptionsButton.setFocusable(false);
+		adminOptionsButton.addActionListener(e -> {
+			deletePcButtonPanel.setVisible(true);
+			showUsersButtonPanel.setVisible(true);
+			modifyUserButtonPanel.setVisible(true);
+			deleteUserButtonPanel.setVisible(true);
+		});
 	}
 	
 	//Managing the panel which hold "Admin Options" button.
@@ -255,6 +333,7 @@ public class AdminFrame extends JFrame{
 		addPc.addActionListener(e -> {
 			addPcPanel.setVisible(true);
 			editProfilePanel.setVisible(false);
+			panelG.setVisible(false);
 		});
 	}
 	// Managing the panel for the button.
@@ -271,12 +350,70 @@ public class AdminFrame extends JFrame{
 		editProfile.addActionListener(e -> {
 			editProfilePanel.setVisible(true);
 			addPcPanel.setVisible(false);
+			panelG.setVisible(false);
 		});
 	}
 	// Managing the panel for the button.
 	public void manageEditButtonPanel() {
 		editButtonPanel.setSize(200, 50);
 		editButtonPanel.add(editProfile);
+	}
+	// Managing "admin" buttons
+	public void manageDeletePcButton() {
+		deletePcButton.setText("Delete PC");
+		deletePcButton.setBackground(Color.red);
+		deletePcButton.setFocusable(false);
+		deletePcButton.addActionListener(null);
+	}
+	
+	public void manageDeletePcButtonPanel() {
+		deletePcButtonPanel.setSize(200, 50);
+		deletePcButtonPanel.add(deletePcButton);
+		deletePcButtonPanel.setVisible(false);
+	}
+	
+	public void manageShowUsersButton() {
+		showUsersButton.setText("Show Users");
+		showUsersButton.setBackground(Color.green);
+		showUsersButton.setFocusable(false);
+		showUsersButton.addActionListener(null);
+	}
+	
+	public void manageShowUsersButtonPanel() {
+		showUsersButtonPanel.setSize(200, 50);
+		showUsersButtonPanel.add(showUsersButton);
+		showUsersButtonPanel.setVisible(false);
+	}
+	
+	public void manageModifyUserButton() {
+		modifyUserButton.setText("Edit User");
+		modifyUserButton.setBackground(Color.yellow);
+		modifyUserButton.setFocusable(false);
+		modifyUserButton.addActionListener(e -> {
+			addPcPanel.setVisible(false);
+			editProfilePanel.setVisible(false);
+			panelG.setVisible(true);
+			//activatePassChengeButtonPanel.setVisible(true);
+		});
+	}
+	
+	public void manageModifyUserButtonPanel() {
+		modifyUserButtonPanel.setSize(200, 50);
+		modifyUserButtonPanel.add(modifyUserButton);
+		modifyUserButtonPanel.setVisible(false);
+	}
+	
+	public void manageDeleteUserButton() {
+		deleteUserButton.setText("Delete User");
+		deleteUserButton.setBackground(Color.RED);
+		deleteUserButton.setFocusable(false);
+		deleteUserButton.addActionListener(null);
+	}
+	
+	public void manageDeleteUserButtonPanel() {
+		deleteUserButtonPanel.setSize(200, 50);
+		deleteUserButtonPanel.add(deleteUserButton);
+		deleteUserButtonPanel.setVisible(false);
 	}
 	// Managing the button for saving new workstation in the database.
 	public void manageSavePcButton() {
@@ -285,6 +422,39 @@ public class AdminFrame extends JFrame{
 		savePc.setFocusable(false);
 		savePc.addActionListener(new savePcListen());
 	}
+	
+	// Managing the button which activate the option of password change for the user.
+	public void manageActivatePassChangeButton() {
+		activatePassChangeButton.setText("Set new password");
+		activatePassChangeButton.setBackground(Color.red);
+		activatePassChangeButton.setFocusable(false);
+		activatePassChangeButton.addActionListener(e -> {
+			password.setEditable(true);
+			saveNewPassButtonPanel.setVisible(true);
+		});
+	}
+		
+	// Managing the panel for the "activatePassChangeButton".
+	public void manageActivatePassChangeButtonPanel() {
+		activatePassChengeButtonPanel.setSize(200, 50);
+		activatePassChengeButtonPanel.add(activatePassChangeButton);
+	}
+	
+	// Managing the button which saves password change
+	public void manageSaveNewPassButton() {
+		saveNewPassButton.setText("Save new password");
+		saveNewPassButton.setBackground(Color.RED);
+		saveNewPassButton.setFocusable(false);
+		saveNewPassButton.addActionListener(new editPassword());
+	}
+		
+	// Managing the panel for the "activatePassChangeButton".
+	public void manageSaveNewPassButtonPanel() {
+		saveNewPassButtonPanel.setSize(200, 50);
+		saveNewPassButtonPanel.add(saveNewPassButton);
+		saveNewPassButtonPanel.setVisible(false);
+	}
+	
 	// Managing the panel for new workstation addition.
 	public void manageAddPcPanel() {
 		addPcPanel.setLayout(new GridLayout(20, 1));
@@ -380,7 +550,7 @@ public class AdminFrame extends JFrame{
 		postL.setText("Post");
 		postL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
-		password.setEditable(true);
+		password.setEditable(false);
 		password.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		password.setSize(600, 50);
 		passL.setSize(600, 50);
@@ -482,20 +652,39 @@ public class AdminFrame extends JFrame{
 				user.setSurname(surname.getText());
 				user.setDateOfBirth(Date.valueOf(dateOfBirth.getText()));
 				user.setPost(post.getText());
-				user.setPassword(password.getText());
+				//user.setPassword(password.getText());
 				user.setEmail(email.getText());
 				dao.getUserDao().modifyUser(user, mail);
 			} catch(Exception x) {
 				System.out.println(x.getMessage());
 			}
+		}
+	}
+	
+	public class editPassword implements ActionListener {
+		
+		editPassword() {
 			
-			//name.setText("");
-			//surname.setText("");
-			//dateOfBirth.setText("");
-			//post.setText("");
-			//password.setText("");
-			//email.setText("");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			
+			try {
+				User user = new User();
+				user.setId(Integer.valueOf(editId.getText()));
+				user.setName(name.getText());
+				user.setSurname(surname.getText());
+				user.setDateOfBirth(Date.valueOf(dateOfBirth.getText()));
+				user.setPost(post.getText());
+				user.setPassword(password.getText());
+				user.setEmail(email.getText());
+				dao.getUserDao().modifyPassword(user, mail);
+			} catch(Exception x) {
+				System.out.println(x.getMessage());
+			}
+			password.setText(null);
+			password.setEditable(false);
 		}
 	}
 	
@@ -611,7 +800,7 @@ public class AdminFrame extends JFrame{
 		surname.setText(u.getSurname());
 		dateOfBirth.setText(String.valueOf(u.getDateOfBirth()));
 		post.setText(u.getPost());
-		password.setText(u.getPassword());
+		//password.setText(u.getPassword());
 		email.setText(u.getEmail());
 		
 	}
@@ -642,6 +831,18 @@ public class AdminFrame extends JFrame{
 		manageRefreshListButtonPanel();
 		ManageAdminOptionsButton();
 		ManageAdminOptionsButtonPanel();
+		manageDeletePcButton();
+		manageDeletePcButtonPanel();
+		manageShowUsersButton();
+		manageShowUsersButtonPanel();
+		manageModifyUserButton();
+		manageModifyUserButtonPanel();
+		manageDeleteUserButton();
+		manageDeleteUserButtonPanel();
+		manageActivatePassChangeButton();
+		manageActivatePassChangeButtonPanel();
+		manageSaveNewPassButton();
+		manageSaveNewPassButtonPanel();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");

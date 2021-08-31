@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import com.amalmikolaj.AdminFrame.editPassword;
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
@@ -95,6 +97,12 @@ public class UserFrame extends JFrame{
 	JButton refreshListButton = new JButton("List Refresh");
 	JPanel refreshListButtonPanel = new JPanel();
 	
+	JButton activatePassChangeButton = new JButton();
+	JPanel activatePassChengeButtonPanel = new JPanel();
+	
+	JButton saveNewPassButton = new JButton();
+	JPanel saveNewPassButtonPanel = new JPanel();
+	
 	
 	public void manageE() {
 		panelE.setSize(800, 250);
@@ -180,11 +188,13 @@ public class UserFrame extends JFrame{
 	public void manageC() {
 		
 		panelC.setSize(400, 700);
-		panelC.setLayout(new GridLayout(6, 1));
+		panelC.setLayout(new GridLayout(10, 1));
 		panelC.add(addButtonPanel);
 		panelC.add(editButtonPanel);
 		panelC.add(selectPcButP);
 		panelC.add(refreshListButtonPanel);
+		panelC.add(activatePassChengeButtonPanel);
+		panelC.add(saveNewPassButtonPanel);
 		
 	}
 	public void manageD() {
@@ -266,6 +276,40 @@ public class UserFrame extends JFrame{
 		savePc.setFocusable(false);
 		savePc.addActionListener(new savePcListen());
 	}
+	
+	// Managing the button which activate the option of password change for the user.
+	public void manageActivatePassChangeButton() {
+		activatePassChangeButton.setText("Set new password");
+		activatePassChangeButton.setBackground(Color.red);
+		activatePassChangeButton.setFocusable(false);
+		activatePassChangeButton.addActionListener(e -> {
+			password.setEditable(true);
+			saveNewPassButtonPanel.setVisible(true);
+		});
+	}
+			
+	// Managing the panel for the "activatePassChangeButton".
+	public void manageActivatePassChangeButtonPanel() {
+		activatePassChengeButtonPanel.setSize(200, 50);
+		activatePassChengeButtonPanel.add(activatePassChangeButton);
+	}
+		
+	// Managing the button which saves password change
+	public void manageSaveNewPassButton() {
+		saveNewPassButton.setText("Save new password");
+		saveNewPassButton.setBackground(Color.RED);
+		saveNewPassButton.setFocusable(false);
+		saveNewPassButton.addActionListener(new editPassword());
+	}
+			
+	// Managing the panel for the "activatePassChangeButton".
+	public void manageSaveNewPassButtonPanel() {
+		saveNewPassButtonPanel.setSize(200, 50);
+		saveNewPassButtonPanel.add(saveNewPassButton);
+		saveNewPassButtonPanel.setVisible(false);
+	}
+	
+	
 	// Managing the panel for new workstation addition.
 	public void manageAddPcPanel() {
 		addPcPanel.setLayout(new GridLayout(20, 1));
@@ -361,7 +405,7 @@ public class UserFrame extends JFrame{
 		postL.setText("Post");
 		postL.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		
-		password.setEditable(true);
+		password.setEditable(false);
 		password.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		password.setSize(600, 50);
 		passL.setSize(600, 50);
@@ -463,20 +507,39 @@ public class UserFrame extends JFrame{
 				user.setSurname(surname.getText());
 				user.setDateOfBirth(Date.valueOf(dateOfBirth.getText()));
 				user.setPost(post.getText());
-				user.setPassword(password.getText());
+				//user.setPassword(password.getText());
 				user.setEmail(email.getText());
 				dao.getUserDao().modifyUser(user, mail);
 			} catch(Exception x) {
 				System.out.println(x.getMessage());
 			}
+		}
+	}
+	
+	public class editPassword implements ActionListener {
+		
+		editPassword() {
 			
-			//name.setText("");
-			//surname.setText("");
-			//dateOfBirth.setText("");
-			//post.setText("");
-			//password.setText("");
-			//email.setText("");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			
+			try {
+				User user = new User();
+				user.setId(Integer.valueOf(editId.getText()));
+				user.setName(name.getText());
+				user.setSurname(surname.getText());
+				user.setDateOfBirth(Date.valueOf(dateOfBirth.getText()));
+				user.setPost(post.getText());
+				user.setPassword(password.getText());
+				user.setEmail(email.getText());
+				dao.getUserDao().modifyPassword(user, mail);
+			} catch(Exception x) {
+				System.out.println(x.getMessage());
+			}
+			password.setText(null);
+			password.setEditable(false);
 		}
 	}
 	
@@ -592,7 +655,7 @@ public class UserFrame extends JFrame{
 		surname.setText(u.getSurname());
 		dateOfBirth.setText(String.valueOf(u.getDateOfBirth()));
 		post.setText(u.getPost());
-		password.setText(u.getPassword());
+		//password.setText(null);
 		email.setText(u.getEmail());
 		
 	}
@@ -621,6 +684,10 @@ public class UserFrame extends JFrame{
 		manageSelectPcToModifyButton();
 		manageSelectPcButP();
 		manageRefreshListButtonPanel();
+		manageActivatePassChangeButton();
+		manageActivatePassChangeButtonPanel();
+		manageSaveNewPassButton();
+		manageSaveNewPassButtonPanel();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");
