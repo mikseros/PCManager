@@ -1,14 +1,15 @@
 package com.amalmikolaj;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Vector;
 
-import com.amalmikolaj.UserFrame.editPassword;
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
@@ -17,8 +18,10 @@ public class AdminFrame extends JFrame{
 	String mail ;
 	
 	
-	DefaultListModel<Workstation>listModel = new DefaultListModel<Workstation>();
+	DefaultListModel<Workstation> modelL = new DefaultListModel<Workstation>();
+	JList<Workstation> workstationJList = new JList<Workstation>(modelL);
 	ArrayList<Workstation> workstationList = new ArrayList<Workstation>();
+	ArrayList<User> userList = new ArrayList<User>();
 	JScrollPane workstationListScrolling = new JScrollPane();
 	DaoFactory dao = new DaoFactory();
 	JLabel label = new JLabel();
@@ -148,15 +151,15 @@ public class AdminFrame extends JFrame{
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
 				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
-		
-		JList<Workstation> workstationJList = new JList<Workstation>(new Vector<Workstation>(workstationList));
-		//workstationJList.setModel(listModel);
+		modelL.addAll(workstationList);
 		workstationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		workstationJList.addListSelectionListener(new getPcToModM());
         
         workstationListScrolling = new JScrollPane(workstationJList);
         workstationListScrolling.setSize(800, 150);
@@ -164,6 +167,8 @@ public class AdminFrame extends JFrame{
 	}
 	
 	public void refreshList() {
+		workstationList.clear();
+		modelL.clear();
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
 				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
@@ -171,8 +176,11 @@ public class AdminFrame extends JFrame{
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		modelL.addAll(workstationList);
 		
 	}
+	
+	
 	// Managing the panel which holds the form for workstation edition.
 	public void manageF() {
 		panelF.setSize(800, 450);
@@ -293,8 +301,7 @@ public class AdminFrame extends JFrame{
 		refreshListButton.setFocusable(false);
 		refreshListButton.setSize(200, 50);
 		refreshListButton.addActionListener(e -> {
-			//listModel.removeAllElements();
-			//listModel.addAll(workstationList);
+			refreshList();
 		});
 		refreshListButtonPanel.add(refreshListButton);
 	}
@@ -724,6 +731,7 @@ public class AdminFrame extends JFrame{
 			editDob.setText("");
 			editCheque.setText("");
 			editRetComm.setText("");
+			refreshList();
 			
 		}	
 	}
@@ -792,6 +800,49 @@ public class AdminFrame extends JFrame{
 		}
 		
 	}
+	
+	public class getPcToModM implements ListSelectionListener {
+		
+		getPcToModM() {
+			
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			try {
+				Workstation w = workstationJList.getSelectedValue();
+				editId.setText(String.valueOf(w.getId()));
+				//Workstation w = dao.getWorkstationDao().getWorkstationById(Integer.valueOf(editId.getText()));
+				editBrand.setText(w.getBrand());
+				editModel.setText(w.getModel());
+				editTag.setText(w.getTag());
+				edStudName.setText(w.getStudentName());
+				edStudSurn.setText(w.getStudentSurname());
+				editCourse.setText(w.getCourse());
+				editDob.setText(w.getDateOfBorrow().toString());
+				editCheque.setText(String.valueOf(w.isCheque()));
+				editRetComm.setText(w.getReturnComment());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public class deletePC implements ActionListener {
+		deletePC() {
+			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Workstation w = new Workstation();
+			
+			
+		}
+	}
+
 	// Filling panel for modification of the user-account.
 	public void getUserInfo() {
 		

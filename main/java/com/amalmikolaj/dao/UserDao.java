@@ -8,6 +8,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -24,6 +27,25 @@ public class UserDao {
 	public UserDao(Connection con) {
 		this.connection = con;
 	}
+	
+	
+	public List<User> showAllUsers() throws Exception {
+
+        List<User> usersList = new ArrayList<User>();
+        String query = "SELECT * FROM user;";
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        while(rs.next()) {
+            User u  = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5),
+                    rs.getString(6), rs.getString(7));
+            usersList.add(u);
+        }
+        st.close();
+        //connection.close();
+        return usersList;
+
+    }
+	
 
 	public User getUserById(int id) {
 		User user = null;

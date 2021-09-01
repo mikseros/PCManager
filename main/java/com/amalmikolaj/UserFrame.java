@@ -1,22 +1,23 @@
 package com.amalmikolaj;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Vector;
 
-import com.amalmikolaj.AdminFrame.editPassword;
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
 
 public class UserFrame extends JFrame{
 	String mail ;
-	
-	
+	DefaultListModel<Workstation> modelL = new DefaultListModel<Workstation>();
+	JList<Workstation> workstationJList = new JList<Workstation>(modelL);
 	DefaultListModel<Workstation>listModel = new DefaultListModel<Workstation>();
 	ArrayList<Workstation> workstationList = new ArrayList<Workstation>();
 	JScrollPane workstationListScrolling = new JScrollPane();
@@ -111,15 +112,21 @@ public class UserFrame extends JFrame{
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
 				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
-		
-		JList<Workstation> workstationJList = new JList<Workstation>(new Vector<Workstation>(workstationList));
+		//Vector<Workstation> vec_tor = new Vector<Workstation>();
+		//JList<Workstation> workstationJList = new JList<Workstation>(new Vector<Workstation>(workstationList));
+		//Vector vectorA = new Vector(workstationList);
+		//modelL.addAll(vectorA);
+		//modelL.addAll(new Vector<Workstation>(workstationList));
 		//workstationJList.setModel(listModel);
+		modelL.addAll(workstationList);
 		workstationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		workstationJList.addListSelectionListener(new getPcToModM());
         
         workstationListScrolling = new JScrollPane(workstationJList);
         workstationListScrolling.setSize(800, 150);
@@ -127,6 +134,8 @@ public class UserFrame extends JFrame{
 	}
 	
 	public void refreshList() {
+		workstationList.clear();
+		modelL.clear();
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
 				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
@@ -134,6 +143,11 @@ public class UserFrame extends JFrame{
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		//Vector vectorB = new Vector(workstationList);
+		//modelL.addAll(vectorB);
+		modelL.addAll(workstationList);
+		//modelL.set((), new Vector<Workstation>(workstationList));
+		//modelL.addAll(new Vector<Workstation>(workstationList));
 		
 	}
 	// Managing the panel which holds the form for workstation edition.
@@ -227,8 +241,7 @@ public class UserFrame extends JFrame{
 		refreshListButton.setFocusable(false);
 		refreshListButton.setSize(200, 50);
 		refreshListButton.addActionListener(e -> {
-			//listModel.removeAllElements();
-			//listModel.addAll(workstationList);
+			refreshList();
 		});
 		refreshListButtonPanel.add(refreshListButton);
 	}
@@ -579,6 +592,7 @@ public class UserFrame extends JFrame{
 			editDob.setText("");
 			editCheque.setText("");
 			editRetComm.setText("");
+			refreshList();
 			
 		}	
 	}
@@ -608,6 +622,35 @@ public class UserFrame extends JFrame{
 				e1.printStackTrace();
 			}
 				
+		}
+	}
+	
+	public class getPcToModM implements ListSelectionListener {
+		
+		getPcToModM() {
+			
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			try {
+				Workstation w = workstationJList.getSelectedValue();
+				editId.setText(String.valueOf(w.getId()));
+				//Workstation w = dao.getWorkstationDao().getWorkstationById(Integer.valueOf(editId.getText()));
+				editBrand.setText(w.getBrand());
+				editModel.setText(w.getModel());
+				editTag.setText(w.getTag());
+				edStudName.setText(w.getStudentName());
+				edStudSurn.setText(w.getStudentSurname());
+				editCourse.setText(w.getCourse());
+				editDob.setText(w.getDateOfBorrow().toString());
+				editCheque.setText(String.valueOf(w.isCheque()));
+				editRetComm.setText(w.getReturnComment());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		}
 	}
 	
