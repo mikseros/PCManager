@@ -15,6 +15,11 @@ import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
 
 public class UserFrame extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	String mail ;
 	DefaultListModel<Workstation> modelL = new DefaultListModel<Workstation>();
 	JList<Workstation> workstationJList = new JList<Workstation>(modelL);
@@ -69,7 +74,7 @@ public class UserFrame extends JFrame{
 	JPanel panelE = new JPanel();
 	JPanel panelF = new JPanel();
 	
-	JLabel editIdL = new JLabel("Type in the ID of PC to modify (Num). Then click 'Modify WOrkstation'. After getting data you can modify and save it by 'Save Modification'");
+	JLabel editIdL = new JLabel("Here you can modify workstations. After edition just click 'Save Modification' button.");
 	JLabel editBrandL = new JLabel("Brand: ");
 	JLabel editModelL = new JLabel("Model: ");
 	JLabel editTagL = new JLabel("Service tag: ");
@@ -111,8 +116,9 @@ public class UserFrame extends JFrame{
 		panelE.add(label, BorderLayout.NORTH);
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
-				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
-				
+				if(dao.getWorkstationDao().showAllMachines().get(i).getIsDeleted()==false) {
+					workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -138,7 +144,9 @@ public class UserFrame extends JFrame{
 		modelL.clear();
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
-				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				if(dao.getWorkstationDao().showAllMachines().get(i).getIsDeleted()==false) {
+					workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -483,6 +491,7 @@ public class UserFrame extends JFrame{
 		dateOfBorrow.setEditable(true);
 		dateOfBorrow.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		dateOfBorrow.setSize(600, 50);
+		dateOfBorrow.setText("1900-01-01");
 		dateLabel.setSize(600, 50);
 		dateLabel.setText("Date");
 		dateLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
@@ -618,7 +627,6 @@ public class UserFrame extends JFrame{
 				editCheque.setText(String.valueOf(w.isCheque()));
 				editRetComm.setText(w.getReturnComment());
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 				
@@ -647,7 +655,6 @@ public class UserFrame extends JFrame{
 				editCheque.setText(String.valueOf(w.isCheque()));
 				editRetComm.setText(w.getReturnComment());
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
@@ -672,21 +679,19 @@ public class UserFrame extends JFrame{
 			workstation.setDateOfBorrow(Date.valueOf(dateOfBorrow.getText()));
 			workstation.setCheque(Boolean.parseBoolean(cheque.getText()));
 			workstation.setReturnComment(returnComment.getText());
-			try {
-				dao.getWorkstationDao().addWorkstation(workstation);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			workstation.setIsDeleted(false);
+			dao.getWorkstationDao().addWorkstation(workstation);
+			
 			brand.setText("");
 			model.setText("");
 			tag.setText("");
 			studentName.setText("");
 			studentSurname.setText("");
 			course.setText("");
-			dateOfBorrow.setText("");
+			dateOfBorrow.setText("1900-01-01");
 			cheque.setText("");
-			returnComment.setText("");	
+			returnComment.setText("");
+			refreshList();
 		}
 		
 	}

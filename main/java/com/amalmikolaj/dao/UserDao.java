@@ -37,7 +37,7 @@ public class UserDao {
         ResultSet rs = st.executeQuery(query);
         while(rs.next()) {
             User u  = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5),
-                    rs.getString(6), rs.getString(7));
+                    rs.getString(6), rs.getString(7), rs.getBoolean(8));
             usersList.add(u);
         }
         st.close();
@@ -55,7 +55,7 @@ public class UserDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getBoolean(8));
 			}
 
 //			ps.close();
@@ -75,7 +75,7 @@ public class UserDao {
 			ps.setString(1, mail);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getBoolean(8));
 			}
 
 		} catch (SQLException exception) {

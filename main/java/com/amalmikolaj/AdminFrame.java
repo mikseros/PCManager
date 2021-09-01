@@ -15,14 +15,23 @@ import com.amalmikolaj.model.Workstation;
 import com.amalmikolaj.model.User;
 
 public class AdminFrame extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	String mail ;
 	
 	
 	DefaultListModel<Workstation> modelL = new DefaultListModel<Workstation>();
 	JList<Workstation> workstationJList = new JList<Workstation>(modelL);
 	ArrayList<Workstation> workstationList = new ArrayList<Workstation>();
-	ArrayList<User> userList = new ArrayList<User>();
 	JScrollPane workstationListScrolling = new JScrollPane();
+	DefaultListModel<User> modelUser = new DefaultListModel<User>();
+	JList<User> userJList = new JList<User>(modelUser);
+	ArrayList<User> userList = new ArrayList<User>();
+	JScrollPane userListScroll = new JScrollPane();
 	DaoFactory dao = new DaoFactory();
 	JLabel label = new JLabel();
 	JButton editProfile = new JButton();
@@ -71,7 +80,7 @@ public class AdminFrame extends JFrame{
 	JPanel panelE = new JPanel();
 	JPanel panelF = new JPanel();
 	
-	JLabel editIdL = new JLabel("Type in the ID of PC to modify (Num). Then click 'Modify WOrkstation'. After getting data you can modify and save it by 'Save Modification'");
+	JLabel editIdL = new JLabel("Here you can modify workstations. After edition just click 'Save Modification' button.");
 	JLabel editBrandL = new JLabel("Brand: ");
 	JLabel editModelL = new JLabel("Model: ");
 	JLabel editTagL = new JLabel("Service tag: ");
@@ -141,17 +150,15 @@ public class AdminFrame extends JFrame{
 	JButton saveNewPassButton = new JButton();
 	JPanel saveNewPassButtonPanel = new JPanel();
 
-	
-	
-	
 	public void manageE() {
 		panelE.setSize(800, 250);
 		panelE.setLayout(new BorderLayout());
 		panelE.add(label, BorderLayout.NORTH);
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
-				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
-				
+				if(dao.getWorkstationDao().showAllMachines().get(i).getIsDeleted()==false) {
+					workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -171,12 +178,38 @@ public class AdminFrame extends JFrame{
 		modelL.clear();
 		try {
 			for(int i = 0; i + 1 <= dao.getWorkstationDao().showAllMachines().size(); i++) {
-				workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				if(dao.getWorkstationDao().showAllMachines().get(i).getIsDeleted()==false) {
+					workstationList.add(dao.getWorkstationDao().showAllMachines().get(i));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		modelL.addAll(workstationList);
+		modelL.addAll(workstationList);	
+	}
+	
+	// Managing the list of users
+	public void usersList() {
+		panelE.removeAll();
+		panelE.add(label, BorderLayout.NORTH);
+		try {
+			for(int i = 0; i + 1 <= dao.getUserDao().showAllUsers().size(); i++) {
+				if(dao.getUserDao().showAllUsers().get(i).isDeleted()==false) {
+					userList.add(dao.getUserDao().showAllUsers().get(i));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		modelUser.addAll(userList);
+		userJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		userJList.addListSelectionListener(new getPcToModM());
+        
+
+        userListScroll = new JScrollPane(userJList);
+        userListScroll.setSize(800, 150);
+        panelE.add(userListScroll, BorderLayout.CENTER);
 		
 	}
 	
@@ -370,7 +403,7 @@ public class AdminFrame extends JFrame{
 		deletePcButton.setText("Delete PC");
 		deletePcButton.setBackground(Color.red);
 		deletePcButton.setFocusable(false);
-		deletePcButton.addActionListener(null);
+		deletePcButton.addActionListener(new deletePC());
 	}
 	
 	public void manageDeletePcButtonPanel() {
@@ -383,7 +416,9 @@ public class AdminFrame extends JFrame{
 		showUsersButton.setText("Show Users");
 		showUsersButton.setBackground(Color.green);
 		showUsersButton.setFocusable(false);
-		showUsersButton.addActionListener(null);
+		showUsersButton.addActionListener(e -> {
+			usersList();
+		});
 	}
 	
 	public void manageShowUsersButtonPanel() {
@@ -622,6 +657,7 @@ public class AdminFrame extends JFrame{
 		dateOfBorrow.setEditable(true);
 		dateOfBorrow.setFont(new Font("Mv Boli", Font.PLAIN, 15));
 		dateOfBorrow.setSize(600, 50);
+		dateOfBorrow.setText("1900-01-01");
 		dateLabel.setSize(600, 50);
 		dateLabel.setText("Date");
 		dateLabel.setFont(new Font("Mv Boli", Font.PLAIN, 15));
@@ -757,7 +793,6 @@ public class AdminFrame extends JFrame{
 				editCheque.setText(String.valueOf(w.isCheque()));
 				editRetComm.setText(w.getReturnComment());
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 				
@@ -785,7 +820,6 @@ public class AdminFrame extends JFrame{
 			try {
 				dao.getWorkstationDao().addWorkstation(workstation);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			brand.setText("");
@@ -794,9 +828,10 @@ public class AdminFrame extends JFrame{
 			studentName.setText("");
 			studentSurname.setText("");
 			course.setText("");
-			dateOfBorrow.setText("");
+			dateOfBorrow.setText("1900-01-01");
 			cheque.setText("");
-			returnComment.setText("");	
+			returnComment.setText("");
+			refreshList();
 		}
 		
 	}
@@ -823,23 +858,18 @@ public class AdminFrame extends JFrame{
 				editCheque.setText(String.valueOf(w.isCheque()));
 				editRetComm.setText(w.getReturnComment());
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
 		}
 	}
-	
+	// Action Listener for deleting workstation
 	public class deletePC implements ActionListener {
-		deletePC() {
-			
-		}
-
+		deletePC() {}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Workstation w = new Workstation();
-			
-			
+			dao.getWorkstationDao().deletePC(Integer.valueOf(editId.getText()));
+			refreshList();
 		}
 	}
 

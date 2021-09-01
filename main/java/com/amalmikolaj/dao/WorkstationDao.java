@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -30,7 +29,7 @@ public class WorkstationDao {
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
 			w = new Workstation(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-				rs.getString(6), rs.getString(7), rs.getDate(8), rs.getBoolean(9), rs.getString(10));
+				rs.getString(6), rs.getString(7), rs.getDate(8), rs.getBoolean(9), rs.getString(10), rs.getBoolean(11));
 		}
 		ps.close();
 		//connection.close();
@@ -46,10 +45,10 @@ public class WorkstationDao {
         ResultSet rs = st.executeQuery(query);
         while(rs.next()) {
             Workstation w = new Workstation(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                    rs.getString(6), rs.getString(7), rs.getDate(8), rs.getBoolean(9), rs.getString(10));
+                    rs.getString(6), rs.getString(7), rs.getDate(8), rs.getBoolean(9), rs.getString(10), rs.getBoolean(11));
             PCList.add(w);
         }
-        st.close();
+        //st.close();
         //connection.close();
         return PCList;
 
@@ -58,7 +57,7 @@ public class WorkstationDao {
 	public void addWorkstation(Workstation workStation) {
 		
 		
-		String newPC = ("INSERT INTO pc (brand, model, tag, student_Name, student_Surname, course, date_Of_Borrow, cheque, return_Comment) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		String newPC = ("INSERT INTO pc (brand, model, tag, student_Name, student_Surname, course, date_Of_Borrow, cheque, return_Comment, isDeleted) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		try
 		{
 		PreparedStatement ps = connection.prepareStatement(newPC);
@@ -71,32 +70,16 @@ public class WorkstationDao {
 		ps.setDate(7, (java.sql.Date) workStation.getDateOfBorrow());
 		ps.setBoolean(8, workStation.isCheque());
 		ps.setString(9, workStation.getReturnComment());
+		ps.setBoolean(10, workStation.getIsDeleted());
 		
 		ps.executeUpdate();
 		} catch(SQLException exception) {
 			System.out.println(exception.getMessage());
 		}
-//		ps.close();
+		JOptionPane.showMessageDialog(null, "New workstation added!");
 //		connection.close();
 		System.out.println(workStation);
 	
-	}
-	
-	public void deletePC(int id) throws Exception{
-			
-			String deletePC = ("DELETE FROM pc WHERE pc_id = ?;");
-			
-			PreparedStatement ps = connection.prepareStatement(deletePC);
-			ps.setInt(1, id);
-			ps.executeUpdate();
-			
-			if (ps.executeUpdate()== 1) {
-				System.out.println("1 row affected");
-			} else {
-				System.out.println("0 rows affected");
-			}
-			//ps.close();
-			//connection.close();
 	}
 	
 	public void modifyPC(Workstation w) throws Exception{
@@ -121,10 +104,10 @@ public class WorkstationDao {
 	}
  
 
-	public void deletePC(Workstation w) {
+	public void deletePC(int id) {
 		try {
 			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("UPDATE pc SET isDeleted = 1 WHERE pc_id = ?;");
-			ps.setInt(1, w.getId());
+			ps.setInt(1, id);
 			ps.executeUpdate();
 			JOptionPane.showMessageDialog(null, "Workstation deleted!");
 		} catch(Exception e) {

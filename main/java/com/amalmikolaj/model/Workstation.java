@@ -14,13 +14,14 @@ public class Workstation {
 	private boolean cheque;
 	private String returnComment;
 	private Date dateOfBorrow;
+	private Boolean isDeleted;
 	
 	public Workstation() {
 		
 	}
 	
 	public Workstation(int id, String brand, String model, String tag, String studentName, 
-		String studentSurname, String course, Date dateOfBorrow, boolean cheque, String returnComment) {
+		String studentSurname, String course, Date dateOfBorrow, boolean cheque, String returnComment, boolean isDeleted) {
 		this.id = id;
 		this.brand = brand;
 		this.model = model;
@@ -31,6 +32,15 @@ public class Workstation {
 		this.cheque = cheque;
 		this.returnComment = returnComment;
 		this.dateOfBorrow = dateOfBorrow;
+		this.isDeleted = isDeleted;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	public int getId() {

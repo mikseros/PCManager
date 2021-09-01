@@ -11,12 +11,13 @@ public abstract class AbstractUser implements UserInterface{
     String post;
     String password;
     String email;
+    boolean isDeleted;
     
 	AbstractUser() {
 		
 	}
 
-    AbstractUser(int id, String name, String surname, Date dateOfBirth, String post, String password, String email){
+    AbstractUser(int id, String name, String surname, Date dateOfBirth, String post, String password, String email, boolean isDeleted){
 
         this.id = id;
         this.name = name;
@@ -25,7 +26,16 @@ public abstract class AbstractUser implements UserInterface{
         this.post = post;
         this.password = password;
         this.email = email;
+        this.isDeleted = isDeleted;
     }
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 	public String getEmail() {
 		return email;
