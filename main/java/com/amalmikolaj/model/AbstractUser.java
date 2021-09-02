@@ -95,7 +95,7 @@ public abstract class AbstractUser implements UserInterface{
 
 	@Override
 	public String toString() {
-		return "AbstractUser [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
 				+ ", post=" + post + ", password=" + password + ", email=" + email + "]";
 	}
 

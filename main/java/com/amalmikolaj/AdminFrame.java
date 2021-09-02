@@ -124,25 +124,11 @@ public class AdminFrame extends JFrame{
 	
 	JButton modifyWS = new JButton("Save Modification");
 	
-	JButton selectPcToModify = new JButton("Modify Workstation");
-	JPanel selectPcButP = new JPanel();
-	JButton refreshListButton = new JButton("List Refresh");
-	JPanel refreshListButtonPanel = new JPanel();
-	
 	JButton adminOptionsButton = new JButton();
 	JPanel adminOptionsButtonPanel = new JPanel();
 	
 	JButton deletePcButton = new JButton();
 	JPanel deletePcButtonPanel = new JPanel();
-	
-	JButton showUsersButton = new JButton();
-	JPanel showUsersButtonPanel = new JPanel();
-	
-	JButton modifyUserButton = new JButton();
-	JPanel modifyUserButtonPanel = new JPanel();
-	
-	JButton deleteUserButton = new JButton();
-	JPanel deleteUserButtonPanel = new JPanel();
 	
 	JButton activatePassChangeButton = new JButton();
 	JPanel activatePassChengeButtonPanel = new JPanel();
@@ -187,32 +173,6 @@ public class AdminFrame extends JFrame{
 		}
 		modelL.addAll(workstationList);	
 	}
-	
-	// Managing the list of users
-	public void usersList() {
-		panelE.removeAll();
-		panelE.add(label, BorderLayout.NORTH);
-		try {
-			for(int i = 0; i + 1 <= dao.getUserDao().showAllUsers().size(); i++) {
-				if(dao.getUserDao().showAllUsers().get(i).isDeleted()==false) {
-					userList.add(dao.getUserDao().showAllUsers().get(i));
-				}
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		
-		modelUser.addAll(userList);
-		userJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		userJList.addListSelectionListener(new getPcToModM());
-        
-
-        userListScroll = new JScrollPane(userJList);
-        userListScroll.setSize(800, 150);
-        panelE.add(userListScroll, BorderLayout.CENTER);
-		
-	}
-	
 	
 	// Managing the panel which holds the form for workstation edition.
 	public void manageF() {
@@ -293,23 +253,16 @@ public class AdminFrame extends JFrame{
 		panelC.setLayout(new GridLayout(12, 1));
 		panelC.add(addButtonPanel);
 		panelC.add(editButtonPanel);
-		panelC.add(selectPcButP);
-		panelC.add(refreshListButtonPanel);
 		panelC.add(activatePassChengeButtonPanel);
 		panelC.add(saveNewPassButtonPanel);
-		panelC.add(adminOptionsButtonPanel);
 		panelC.add(deletePcButtonPanel);
-		panelC.add(showUsersButtonPanel);
-		panelC.add(modifyUserButtonPanel);
-		panelC.add(deleteUserButtonPanel);
-		
+		panelC.add(adminOptionsButtonPanel);
 	}
 	public void manageD() {
 		panelD.setSize(400, 700);
 		panelD.setLayout(new BorderLayout());
 		panelD.add(addPcPanel, BorderLayout.NORTH);
 		panelD.add(editProfilePanel, BorderLayout.CENTER);
-		//panelD.add(panelG, BorderLayout.NORTH);
 	}
 	// Managing the label with the title.
 	public void labelManage() {
@@ -319,36 +272,18 @@ public class AdminFrame extends JFrame{
 	    label.setVerticalAlignment(JLabel.CENTER);
 		label.setFont(new Font("Mv Boli", Font.PLAIN, 30));
 	}
-	// Managing the button which is filling data to the form of workstation modification.
-	public void manageSelectPcToModifyButton() {
-		selectPcToModify.setBackground(Color.YELLOW);
-		selectPcToModify.setFocusable(false);
-		selectPcToModify.setSize(200, 50);
-		selectPcToModify.addActionListener(new getPcToMod());
-		
-	}
-	// Managing the refresh(list) button.
-	public void manageRefreshListButtonPanel() {
-		refreshListButtonPanel.setSize(200, 50);
-		refreshListButton.setBackground(Color.pink);
-		refreshListButton.setFocusable(false);
-		refreshListButton.setSize(200, 50);
-		refreshListButton.addActionListener(e -> {
-			refreshList();
-		});
-		refreshListButtonPanel.add(refreshListButton);
-	}
 	
 	//Managing "Admin Options" button.
 	public void ManageAdminOptionsButton() {
-		adminOptionsButton.setText("Admin Options >>>");
+		adminOptionsButton.setText("Users Manager >>>");
 		adminOptionsButton.setBackground(Color.WHITE);
 		adminOptionsButton.setFocusable(false);
 		adminOptionsButton.addActionListener(e -> {
-			deletePcButtonPanel.setVisible(true);
-			showUsersButtonPanel.setVisible(true);
-			modifyUserButtonPanel.setVisible(true);
-			deleteUserButtonPanel.setVisible(true);
+			AdminFrame2 adFrame2 = new AdminFrame2(mail);
+			this.setVisible(false);
+			//showUsersButtonPanel.setVisible(true);
+			//modifyUserButtonPanel.setVisible(true);
+			//deleteUserButtonPanel.setVisible(true);
 		});
 	}
 	
@@ -358,12 +293,6 @@ public class AdminFrame extends JFrame{
 		adminOptionsButtonPanel.add(adminOptionsButton);
 	}
 	
-	
-	// Managing the panel which hold the button.
-	public void manageSelectPcButP() {
-		selectPcButP.setSize(200, 50);
-		selectPcButP.add(selectPcToModify);
-	}
 	// Managing the button which shows the panel for new workstation addition.
 	public void manageAddPcButton() {
 		addPc.setText("Add new PC");
@@ -409,54 +338,9 @@ public class AdminFrame extends JFrame{
 	public void manageDeletePcButtonPanel() {
 		deletePcButtonPanel.setSize(200, 50);
 		deletePcButtonPanel.add(deletePcButton);
-		deletePcButtonPanel.setVisible(false);
+		deletePcButtonPanel.setVisible(true);
 	}
 	
-	public void manageShowUsersButton() {
-		showUsersButton.setText("Show Users");
-		showUsersButton.setBackground(Color.green);
-		showUsersButton.setFocusable(false);
-		showUsersButton.addActionListener(e -> {
-			usersList();
-		});
-	}
-	
-	public void manageShowUsersButtonPanel() {
-		showUsersButtonPanel.setSize(200, 50);
-		showUsersButtonPanel.add(showUsersButton);
-		showUsersButtonPanel.setVisible(false);
-	}
-	
-	public void manageModifyUserButton() {
-		modifyUserButton.setText("Edit User");
-		modifyUserButton.setBackground(Color.yellow);
-		modifyUserButton.setFocusable(false);
-		modifyUserButton.addActionListener(e -> {
-			addPcPanel.setVisible(false);
-			editProfilePanel.setVisible(false);
-			panelG.setVisible(true);
-			//activatePassChengeButtonPanel.setVisible(true);
-		});
-	}
-	
-	public void manageModifyUserButtonPanel() {
-		modifyUserButtonPanel.setSize(200, 50);
-		modifyUserButtonPanel.add(modifyUserButton);
-		modifyUserButtonPanel.setVisible(false);
-	}
-	
-	public void manageDeleteUserButton() {
-		deleteUserButton.setText("Delete User");
-		deleteUserButton.setBackground(Color.RED);
-		deleteUserButton.setFocusable(false);
-		deleteUserButton.addActionListener(null);
-	}
-	
-	public void manageDeleteUserButtonPanel() {
-		deleteUserButtonPanel.setSize(200, 50);
-		deleteUserButtonPanel.add(deleteUserButton);
-		deleteUserButtonPanel.setVisible(false);
-	}
 	// Managing the button for saving new workstation in the database.
 	public void manageSavePcButton() {
 		savePc.setText("Save new Pc");
@@ -552,7 +436,7 @@ public class AdminFrame extends JFrame{
 		
 		editIdL.setForeground(Color.RED);
 		editId.setFont(new Font("Helvetica", Font.PLAIN, 15));
-		
+		editId.setEditable(false);		
 		editBrand.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		editModel.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		editTag.setFont(new Font("Helvetica", Font.PLAIN, 15));
@@ -728,6 +612,7 @@ public class AdminFrame extends JFrame{
 			}
 			password.setText(null);
 			password.setEditable(false);
+			saveNewPassButtonPanel.setVisible(false);
 		}
 	}
 	
@@ -771,33 +656,7 @@ public class AdminFrame extends JFrame{
 			
 		}	
 	}
-	
-	public class getPcToMod implements ActionListener {
-		
-		getPcToMod() {
-			
-		}
 
-		@Override
-		public void actionPerformed(ActionEvent e){
-			
-			try {
-				Workstation w = dao.getWorkstationDao().getWorkstationById(Integer.valueOf(editId.getText()));
-				editBrand.setText(w.getBrand());
-				editModel.setText(w.getModel());
-				editTag.setText(w.getTag());
-				edStudName.setText(w.getStudentName());
-				edStudSurn.setText(w.getStudentSurname());
-				editCourse.setText(w.getCourse());
-				editDob.setText(w.getDateOfBorrow().toString());
-				editCheque.setText(String.valueOf(w.isCheque()));
-				editRetComm.setText(w.getReturnComment());
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-				
-		}
-	}
 	
 	public class savePcListen implements ActionListener {
 		
@@ -817,11 +676,9 @@ public class AdminFrame extends JFrame{
 			workstation.setDateOfBorrow(Date.valueOf(dateOfBorrow.getText()));
 			workstation.setCheque(Boolean.parseBoolean(cheque.getText()));
 			workstation.setReturnComment(returnComment.getText());
-			try {
-				dao.getWorkstationDao().addWorkstation(workstation);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			workstation.setIsDeleted(false);
+			dao.getWorkstationDao().addWorkstation(workstation);
+			
 			brand.setText("");
 			model.setText("");
 			tag.setText("");
@@ -868,7 +725,19 @@ public class AdminFrame extends JFrame{
 		deletePC() {}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			dao.getWorkstationDao().deletePC(Integer.valueOf(editId.getText()));
+			if(Integer.valueOf(editId.getText())!=0) {
+				dao.getWorkstationDao().deletePC(Integer.valueOf(editId.getText()));
+			}
+			editId.setText("");
+			editBrand.setText("");
+			editModel.setText("");
+			editTag.setText("");
+			edStudName.setText("");
+			edStudSurn.setText("");
+			editCourse.setText("");
+			editDob.setText("");
+			editCheque.setText("");
+			editRetComm.setText("");
 			refreshList();
 		}
 	}
@@ -907,19 +776,10 @@ public class AdminFrame extends JFrame{
 		manageE();
 		manageF();
 		manageModifyWS();
-		manageSelectPcToModifyButton();
-		manageSelectPcButP();
-		manageRefreshListButtonPanel();
 		ManageAdminOptionsButton();
 		ManageAdminOptionsButtonPanel();
 		manageDeletePcButton();
 		manageDeletePcButtonPanel();
-		manageShowUsersButton();
-		manageShowUsersButtonPanel();
-		manageModifyUserButton();
-		manageModifyUserButtonPanel();
-		manageDeleteUserButton();
-		manageDeleteUserButtonPanel();
 		manageActivatePassChangeButton();
 		manageActivatePassChangeButtonPanel();
 		manageSaveNewPassButton();

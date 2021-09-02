@@ -106,9 +106,9 @@ public class UserDao {
 		}
 		
 		return s;
-		}
+	}
 	public void addUser(User user) {
-		String userQuery = "Insert into user (name, surname, date_of_birth, post ,password, mailAdress) VALUES(?,?,?,?,?)";
+		String userQuery = "INSERT INTO user (name, surname, date_of_birth, post ,password, mailAdress) VALUES(?,?,?,?,?,?)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(userQuery);
 			ps.setString(1, user.getName());
@@ -119,6 +119,7 @@ public class UserDao {
 			ps.setString(6, user.getEmail());
 			ps.executeUpdate();
 			ps.close();
+			JOptionPane.showMessageDialog(null, "User addition successful!");
 			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
@@ -155,15 +156,33 @@ public class UserDao {
 		
 	}
 	
+	public void changePass(User user, int id) throws Exception{
+		
+		String modPass = "UPDATE user SET password = ? WHERE user_id = ?;";
+		PreparedStatement ps = connection.prepareStatement(modPass);
+		ps.setString(1, EncryptPassword(user.getPassword()).toString());
+		ps.setInt(2, user.getId());
+		
+		ps.executeUpdate();
+		ps.close();
+		JOptionPane.showMessageDialog(null, "Password update successful!");
+		
+	}
 	
-	public void updateUser(int id, String post) {
-		String SQLString = "UPDATE User SET post = ? WHERE user_id = ?;";
+	
+	public void updateUser(User user) {
+		String SQLString = "UPDATE User SET name = ?, surname = ?, date_of_birth = ?, post = ?, mailAdress = ? WHERE user_id = ?;";
 		try {
 			PreparedStatement ps = connection.prepareStatement(SQLString);
-			ps.setString(1, post);
-			ps.setInt(2, id);
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getSurname());
+			ps.setDate(3, (java.sql.Date) user.getDateOfBirth());
+			ps.setString(4, user.getPost());
+			ps.setString(5, user.getEmail());
+			ps.setInt(6, user.getId());
 			ps.executeUpdate();
 			ps.close();
+			JOptionPane.showMessageDialog(null, "Update successfull!");
 			//connection.close();
 		} catch (SQLException exception) {
 			System.out.println(exception.getMessage());
@@ -202,7 +221,7 @@ public class UserDao {
 					frame.setVisible(false);
 				} else {
 					JOptionPane.showMessageDialog(frame, "Wrong username or password");
-					frame.userTextField.setText("");
+					//frame.userTextField.setText("");
 					frame.passwordField.setText("");
 				}
 			
@@ -218,19 +237,23 @@ public class UserDao {
 		
 		try {
 			
-			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT post FROM user WHERE mailAdress = ?;");
+			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("SELECT post, isDeleted FROM user WHERE mailAdress = ?;");
 			ps.setString(1, frame.userTextField.getText());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				switch(rs.getString("post")) {
-				case "user":
-					UserFrame uFrame = new UserFrame(frame.userTextField.getText());
-					uFrame.setVisible(true);
-					break;
-				case "admin":
-					AdminFrame aFrame = new AdminFrame(frame.userTextField.getText());
-					aFrame.setVisible(true);
-					break;
+				if(rs.getInt("isDeleted")==0) {
+					switch(rs.getString("post")) {
+					case "user":
+						UserFrame uFrame = new UserFrame(frame.userTextField.getText());
+						uFrame.setVisible(true);
+						break;
+					case "admin":
+						AdminFrame aFrame = new AdminFrame(frame.userTextField.getText());
+						aFrame.setVisible(true);
+						break;
+					}
+				} else {
+					JOptionPane.showMessageDialog(frame, "You can't log in!");
 				}
 			}
 		} catch (Exception ex){
@@ -238,10 +261,10 @@ public class UserDao {
 		};
 	}
 	
-	public void deleteUser(User user) {
+	public void deleteUserDao(int id) {
 		try {
 			PreparedStatement ps = (PreparedStatement) connection.prepareStatement("UPDATE user SET isDeleted = 1 WHERE user_id = ?;");
-			ps.setInt(1, user.getId());
+			ps.setInt(1, id);
 			ps.executeUpdate();
 			JOptionPane.showMessageDialog(null, "User deleted!");
 		} catch(Exception e) {

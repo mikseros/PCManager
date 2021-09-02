@@ -30,6 +30,10 @@ public class UserFrame extends JFrame{
 	JLabel label = new JLabel();
 	JButton editProfile = new JButton();
 	JButton addPc = new JButton();
+	JButton activatePassChangeButton = new JButton();
+	JPanel activatePassChengeButtonPanel = new JPanel();
+	JButton saveNewPassButton = new JButton();
+	JPanel saveNewPassButtonPanel = new JPanel();
 	JPanel addPcPanel = new JPanel();
 	JTextField brand = new JTextField();
 	JTextField model = new JTextField();
@@ -98,18 +102,6 @@ public class UserFrame extends JFrame{
 	
 	JButton modifyWS = new JButton("Save Modification");
 	
-	JButton selectPcToModify = new JButton("Modify Workstation");
-	JPanel selectPcButP = new JPanel();
-	JButton refreshListButton = new JButton("List Refresh");
-	JPanel refreshListButtonPanel = new JPanel();
-	
-	JButton activatePassChangeButton = new JButton();
-	JPanel activatePassChengeButtonPanel = new JPanel();
-	
-	JButton saveNewPassButton = new JButton();
-	JPanel saveNewPassButtonPanel = new JPanel();
-	
-	
 	public void manageE() {
 		panelE.setSize(800, 250);
 		panelE.setLayout(new BorderLayout());
@@ -123,13 +115,6 @@ public class UserFrame extends JFrame{
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-		//Vector<Workstation> vec_tor = new Vector<Workstation>();
-		//JList<Workstation> workstationJList = new JList<Workstation>(new Vector<Workstation>(workstationList));
-		//Vector vectorA = new Vector(workstationList);
-		//modelL.addAll(vectorA);
-		//modelL.addAll(new Vector<Workstation>(workstationList));
-		//workstationJList.setModel(listModel);
 		modelL.addAll(workstationList);
 		workstationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		workstationJList.addListSelectionListener(new getPcToModM());
@@ -151,17 +136,13 @@ public class UserFrame extends JFrame{
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		//Vector vectorB = new Vector(workstationList);
-		//modelL.addAll(vectorB);
 		modelL.addAll(workstationList);
-		//modelL.set((), new Vector<Workstation>(workstationList));
-		//modelL.addAll(new Vector<Workstation>(workstationList));
 		
 	}
 	// Managing the panel which holds the form for workstation edition.
 	public void manageF() {
 		panelF.setSize(800, 450);
-		panelF.setLayout(new GridLayout(22, 2));
+		panelF.setLayout(new GridLayout(21, 1));
 		panelF.add(editIdL);
 		panelF.add(editId);
 		panelF.add(editBrandL);
@@ -210,13 +191,12 @@ public class UserFrame extends JFrame{
 	public void manageC() {
 		
 		panelC.setSize(400, 700);
-		panelC.setLayout(new GridLayout(10, 1));
-		panelC.add(addButtonPanel);
-		panelC.add(editButtonPanel);
-		panelC.add(selectPcButP);
-		panelC.add(refreshListButtonPanel);
-		panelC.add(activatePassChengeButtonPanel);
-		panelC.add(saveNewPassButtonPanel);
+		//panelC.setLayout(null);
+		panelC.setLayout(new GridLayout(4, 1));
+		panelC.add(addButtonPanel);//addButtonPanel addPc
+		panelC.add(editButtonPanel);//editProfile
+		panelC.add(activatePassChengeButtonPanel);//activatePassChangeButton
+		panelC.add(saveNewPassButtonPanel);//saveNewPassButton
 		
 	}
 	public void manageD() {
@@ -234,36 +214,13 @@ public class UserFrame extends JFrame{
 	    label.setVerticalAlignment(JLabel.CENTER);
 		label.setFont(new Font("Mv Boli", Font.PLAIN, 30));
 	}
-	// Managing the button which is filling data to the form of workstation modification.
-	public void manageSelectPcToModifyButton() {
-		selectPcToModify.setBackground(Color.YELLOW);
-		selectPcToModify.setFocusable(false);
-		selectPcToModify.setSize(200, 50);
-		selectPcToModify.addActionListener(new getPcToMod());
-		
-	}
-	// Managing the refresh(list) button.
-	public void manageRefreshListButtonPanel() {
-		refreshListButtonPanel.setSize(200, 50);
-		refreshListButton.setBackground(Color.pink);
-		refreshListButton.setFocusable(false);
-		refreshListButton.setSize(200, 50);
-		refreshListButton.addActionListener(e -> {
-			refreshList();
-		});
-		refreshListButtonPanel.add(refreshListButton);
-	}
-	// Managing the panel which hold the button.
-	public void manageSelectPcButP() {
-		selectPcButP.setSize(200, 50);
-		selectPcButP.add(selectPcToModify);
-	}
+	
 	// Managing the button which shows the panel for new workstation addition.
 	public void manageAddPcButton() {
 		addPc.setText("Add new PC");
 		addPc.setBackground(Color.green);
 		addPc.setFocusable(false);
-		addPc.setSize(200, 50);
+		addPc.setSize(200, 100);
 		addPc.addActionListener(e -> {
 			addPcPanel.setVisible(true);
 			editProfilePanel.setVisible(false);
@@ -271,7 +228,7 @@ public class UserFrame extends JFrame{
 	}
 	// Managing the panel for the button.
 	public void manageAddButtonPanel() {
-		addButtonPanel.setSize(200, 50);
+		addButtonPanel.setSize(200, 100);
 		addButtonPanel.add(addPc);
 	}
 	// Managing the button which shows the panel for user-profile modifications.
@@ -279,7 +236,8 @@ public class UserFrame extends JFrame{
 		editProfile.setText("Edit my profile");
 		editProfile.setBackground(Color.cyan);
 		editProfile.setFocusable(false);
-		editProfile.setSize(200, 50);
+		editProfile.setSize(200, 100);
+		//editProfile.setBounds(0, 175, 400, 175);
 		editProfile.addActionListener(e -> {
 			editProfilePanel.setVisible(true);
 			addPcPanel.setVisible(false);
@@ -287,15 +245,8 @@ public class UserFrame extends JFrame{
 	}
 	// Managing the panel for the button.
 	public void manageEditButtonPanel() {
-		editButtonPanel.setSize(200, 50);
+		editButtonPanel.setSize(200, 100);
 		editButtonPanel.add(editProfile);
-	}
-	// Managing the button for saving new workstation in the database.
-	public void manageSavePcButton() {
-		savePc.setText("Save new Pc");
-		savePc.setBackground(Color.green);
-		savePc.setFocusable(false);
-		savePc.addActionListener(new savePcListen());
 	}
 	
 	// Managing the button which activate the option of password change for the user.
@@ -303,15 +254,20 @@ public class UserFrame extends JFrame{
 		activatePassChangeButton.setText("Set new password");
 		activatePassChangeButton.setBackground(Color.red);
 		activatePassChangeButton.setFocusable(false);
+		activatePassChangeButton.setSize(200, 100);
+		//activatePassChangeButton.setBounds(0, 350, 400, 175);
+		activatePassChangeButton.setVisible(true);
 		activatePassChangeButton.addActionListener(e -> {
-			password.setEditable(true);
-			saveNewPassButtonPanel.setVisible(true);
+			if(editProfilePanel.isVisible()) {
+				password.setEditable(true);
+				saveNewPassButtonPanel.setVisible(true);
+			}
 		});
 	}
 			
 	// Managing the panel for the "activatePassChangeButton".
 	public void manageActivatePassChangeButtonPanel() {
-		activatePassChengeButtonPanel.setSize(200, 50);
+		activatePassChengeButtonPanel.setSize(200, 100);
 		activatePassChengeButtonPanel.add(activatePassChangeButton);
 	}
 		
@@ -320,20 +276,29 @@ public class UserFrame extends JFrame{
 		saveNewPassButton.setText("Save new password");
 		saveNewPassButton.setBackground(Color.RED);
 		saveNewPassButton.setFocusable(false);
+		saveNewPassButton.setSize(200, 100);
 		saveNewPassButton.addActionListener(new editPassword());
 	}
 			
 	// Managing the panel for the "activatePassChangeButton".
 	public void manageSaveNewPassButtonPanel() {
-		saveNewPassButtonPanel.setSize(200, 50);
+		saveNewPassButtonPanel.setSize(200, 100);
 		saveNewPassButtonPanel.add(saveNewPassButton);
 		saveNewPassButtonPanel.setVisible(false);
 	}
 	
+	// Managing the button for saving new workstation in the database.
+		public void manageSavePcButton() {
+			savePc.setText("Save new Pc");
+			savePc.setBackground(Color.green);
+			savePc.setFocusable(false);
+			savePc.addActionListener(new savePcListen());
+		}
+	
 	
 	// Managing the panel for new workstation addition.
 	public void manageAddPcPanel() {
-		addPcPanel.setLayout(new GridLayout(20, 1));
+		addPcPanel.setLayout(new GridLayout(19, 1));
 		addPcPanel.add(brandLabel);
 		addPcPanel.add(brand);
 		addPcPanel.add(modelLabel);
@@ -364,7 +329,7 @@ public class UserFrame extends JFrame{
 	}
 	// Managing the form for modify user account.
 	public void manageEditProfilePanel() {
-		editProfilePanel.setLayout(new GridLayout(14, 1));
+		editProfilePanel.setLayout(new GridLayout(13, 1));
 		editProfilePanel.add(userNameL);
 		editProfilePanel.add(name);
 		editProfilePanel.add(uSurnameL);
@@ -386,6 +351,7 @@ public class UserFrame extends JFrame{
 		
 		editIdL.setForeground(Color.RED);
 		editId.setFont(new Font("Helvetica", Font.PLAIN, 15));
+		editId.setEditable(false);
 		
 		editBrand.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		editModel.setFont(new Font("Helvetica", Font.PLAIN, 15));
@@ -562,6 +528,7 @@ public class UserFrame extends JFrame{
 			}
 			password.setText(null);
 			password.setEditable(false);
+			saveNewPassButtonPanel.setVisible(false);
 		}
 	}
 	
@@ -604,33 +571,6 @@ public class UserFrame extends JFrame{
 			refreshList();
 			
 		}	
-	}
-	
-	public class getPcToMod implements ActionListener {
-		
-		getPcToMod() {
-			
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e){
-			
-			try {
-				Workstation w = dao.getWorkstationDao().getWorkstationById(Integer.valueOf(editId.getText()));
-				editBrand.setText(w.getBrand());
-				editModel.setText(w.getModel());
-				editTag.setText(w.getTag());
-				edStudName.setText(w.getStudentName());
-				edStudSurn.setText(w.getStudentSurname());
-				editCourse.setText(w.getCourse());
-				editDob.setText(w.getDateOfBorrow().toString());
-				editCheque.setText(String.valueOf(w.isCheque()));
-				editRetComm.setText(w.getReturnComment());
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-				
-		}
 	}
 	
 	public class getPcToModM implements ListSelectionListener {
@@ -715,6 +655,8 @@ public class UserFrame extends JFrame{
 		labelManage();
 		manageAddPcButton();
 		manageProfileButton();
+		manageSaveNewPassButton();
+		manageActivatePassChangeButton();
 		labelsManage();
 		manageSavePcButton();
 		manageAddPcPanel();
@@ -729,12 +671,7 @@ public class UserFrame extends JFrame{
 		manageE();
 		manageF();
 		manageModifyWS();
-		manageSelectPcToModifyButton();
-		manageSelectPcButP();
-		manageRefreshListButtonPanel();
-		manageActivatePassChangeButton();
 		manageActivatePassChangeButtonPanel();
-		manageSaveNewPassButton();
 		manageSaveNewPassButtonPanel();
 		
 		this.setSize(1600, 700);
