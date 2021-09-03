@@ -177,7 +177,7 @@ public class AdminFrame extends JFrame{
 	// Managing the panel which holds the form for workstation edition.
 	public void manageF() {
 		panelF.setSize(800, 450);
-		panelF.setLayout(new GridLayout(22, 2));
+		panelF.setLayout(new GridLayout(21, 1));
 		panelF.add(editIdL);
 		panelF.add(editId);
 		panelF.add(editBrandL);
@@ -200,28 +200,6 @@ public class AdminFrame extends JFrame{
 		panelF.add(editRetComm);
 		panelF.add(modifyWS);
 		panelF.setVisible(true);
-	}
-	// Managing the panel which holds the form for user edition.
-	public void manageG() {
-		panelG.setSize(400, 700);
-		panelG.setLayout(new GridLayout(15, 2));
-		panelG.add(editUserIdL);
-		panelG.add(editUserId);
-		panelG.add(editUserNameL);
-		panelG.add(editUserName);
-		panelG.add(editUserSurnameL);
-		panelG.add(editUserSurname);
-		panelG.add(editUserDobL);
-		panelG.add(editUserDob);
-		panelG.add(editUserPostL);
-		panelG.add(editUserPost);
-		panelG.add(editUserPassL);
-		panelG.add(editUserPass);
-		panelG.add(editUserMailL);
-		panelG.add(editUserMail);
-		
-		panelG.add(modifyWS);
-		panelG.setVisible(true);
 	}
 	
 	// Managing the button for save the modification of workstation.
@@ -281,9 +259,6 @@ public class AdminFrame extends JFrame{
 		adminOptionsButton.addActionListener(e -> {
 			AdminFrame2 adFrame2 = new AdminFrame2(mail);
 			this.setVisible(false);
-			//showUsersButtonPanel.setVisible(true);
-			//modifyUserButtonPanel.setVisible(true);
-			//deleteUserButtonPanel.setVisible(true);
 		});
 	}
 	
@@ -385,7 +360,7 @@ public class AdminFrame extends JFrame{
 	
 	// Managing the panel for new workstation addition.
 	public void manageAddPcPanel() {
-		addPcPanel.setLayout(new GridLayout(20, 1));
+		addPcPanel.setLayout(new GridLayout(19, 1));
 		addPcPanel.add(brandLabel);
 		addPcPanel.add(brand);
 		addPcPanel.add(modelLabel);
@@ -416,7 +391,7 @@ public class AdminFrame extends JFrame{
 	}
 	// Managing the form for modify user account.
 	public void manageEditProfilePanel() {
-		editProfilePanel.setLayout(new GridLayout(14, 1));
+		editProfilePanel.setLayout(new GridLayout(13, 1));
 		editProfilePanel.add(userNameL);
 		editProfilePanel.add(name);
 		editProfilePanel.add(uSurnameL);
