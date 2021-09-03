@@ -271,5 +271,4 @@ public class UserDao {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
-
 }

@@ -330,8 +330,12 @@ public class AdminFrame2 extends JFrame{
 			user.setPost(addUserPost.getText());
 			user.setPassword(addUserPass.getText());
 			user.setEmail(addUserMail.getText());
-			dao.getUserDao().addUser(user);
-			
+			//dao.getUserDao().addUser(user);
+			if(dao.getUserDao().getUserByMail(addUserMail.getText())==null) {
+				dao.getUserDao().addUser(user);
+			} else {
+				JOptionPane.showMessageDialog(null, "This e-mail is already in use!");
+			}
 			addUserName.setText("");
 			addUserName.setEditable(false);
 			addUserSurname.setText("");
