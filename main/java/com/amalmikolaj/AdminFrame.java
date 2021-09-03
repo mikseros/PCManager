@@ -254,9 +254,9 @@ public class AdminFrame extends JFrame{
 		panelC.add(addButtonPanel);
 		panelC.add(editButtonPanel);
 		panelC.add(activatePassChengeButtonPanel);
-		panelC.add(saveNewPassButtonPanel);
 		panelC.add(deletePcButtonPanel);
 		panelC.add(adminOptionsButtonPanel);
+		panelC.add(saveNewPassButtonPanel);
 	}
 	public void manageD() {
 		panelD.setSize(400, 700);
@@ -355,8 +355,10 @@ public class AdminFrame extends JFrame{
 		activatePassChangeButton.setBackground(Color.red);
 		activatePassChangeButton.setFocusable(false);
 		activatePassChangeButton.addActionListener(e -> {
-			password.setEditable(true);
-			saveNewPassButtonPanel.setVisible(true);
+			if(editProfilePanel.isVisible()) {
+				password.setEditable(true);
+				saveNewPassButtonPanel.setVisible(true);
+			}
 		});
 	}
 		
