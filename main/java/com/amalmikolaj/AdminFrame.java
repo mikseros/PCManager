@@ -19,10 +19,7 @@ public class AdminFrame extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-
 	String mail ;
-	
 	
 	DefaultListModel<Workstation> modelL = new DefaultListModel<Workstation>();
 	JList<Workstation> workstationJList = new JList<Workstation>(modelL);
@@ -135,6 +132,9 @@ public class AdminFrame extends JFrame{
 	
 	JButton saveNewPassButton = new JButton();
 	JPanel saveNewPassButtonPanel = new JPanel();
+	
+	JButton logoutButton = new JButton();
+	JPanel logoutButtonPanel = new JPanel();
 
 	public void manageE() {
 		panelE.setSize(800, 250);
@@ -235,6 +235,7 @@ public class AdminFrame extends JFrame{
 		panelC.add(deletePcButtonPanel);
 		panelC.add(adminOptionsButtonPanel);
 		panelC.add(saveNewPassButtonPanel);
+		panelC.add(logoutButtonPanel);
 	}
 	public void manageD() {
 		panelD.setSize(400, 700);
@@ -257,6 +258,7 @@ public class AdminFrame extends JFrame{
 		adminOptionsButton.setBackground(Color.WHITE);
 		adminOptionsButton.setFocusable(false);
 		adminOptionsButton.addActionListener(e -> {
+			@SuppressWarnings("unused")
 			AdminFrame2 adFrame2 = new AdminFrame2(mail);
 			this.setVisible(false);
 		});
@@ -356,6 +358,22 @@ public class AdminFrame extends JFrame{
 		saveNewPassButtonPanel.setSize(200, 50);
 		saveNewPassButtonPanel.add(saveNewPassButton);
 		saveNewPassButtonPanel.setVisible(false);
+	}
+	
+	// Managing logout button
+	public void manageLogoutButton() {
+		logoutButton.setText("Log Out");
+		logoutButton.setBackground(Color.lightGray);
+		logoutButton.setFocusable(false);
+		logoutButton.addActionListener(e -> {
+			System.exit(0);
+		});
+	}
+		
+	// Managing "logut" button panel
+	public void manageLogoutButtonPanel() {
+		logoutButtonPanel.setSize(200, 50);
+		logoutButtonPanel.add(logoutButton);
 	}
 	
 	// Managing the panel for new workstation addition.
@@ -761,6 +779,8 @@ public class AdminFrame extends JFrame{
 		manageActivatePassChangeButtonPanel();
 		manageSaveNewPassButton();
 		manageSaveNewPassButtonPanel();
+		manageLogoutButtonPanel();
+		manageLogoutButton();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");

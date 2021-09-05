@@ -18,7 +18,6 @@ import com.amalmikolaj.UserFrame;
 import com.amalmikolaj.AdminFrame;
 import com.amalmikolaj.LoginFrame;
 import com.amalmikolaj.model.User;
-import com.amalmikolaj.model.Workstation;
 
 public class UserDao {
 
@@ -101,7 +100,7 @@ public class UserDao {
 		    }
 		    
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -207,6 +206,7 @@ public class UserDao {
 	
 	public void login(LoginFrame frame) {
 		try {
+			@SuppressWarnings("deprecation")
 			String passwordText = frame.passwordField.getText();
 			
 			try {

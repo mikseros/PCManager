@@ -4,17 +4,17 @@ import javax.swing.*;
 
 import com.amalmikolaj.dao.DaoFactory;
 import com.amalmikolaj.model.User;
-import com.amalmikolaj.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 
 public class LoginFrame extends JFrame implements ActionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Container container = getContentPane();
 	JLabel userLabel = new JLabel("Your e-mail");
 	JLabel passwordLabel = new JLabel("PASSWORD");
@@ -72,26 +72,6 @@ public class LoginFrame extends JFrame implements ActionListener{
 		showPassword.addActionListener(this);
 	}
 	
-	private StringBuilder EncryptPassword(String password) {
-		
-	   MessageDigest msg = null;
-	   StringBuilder s = new StringBuilder();
-	   try {
-		msg = MessageDigest.getInstance("SHA-256");
-		   byte[] hash = msg.digest(password.getBytes(StandardCharsets.UTF_8));
-		   // convertir bytes en hexadécimal
-		    
-		   for (byte b : hash) {
-		       s.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
-		   }
-		    
-	   } catch (NoSuchAlgorithmException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	   }
-		
-	   return s;
-	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e){

@@ -102,6 +102,9 @@ public class UserFrame extends JFrame{
 	
 	JButton modifyWS = new JButton("Save Modification");
 	
+	JButton logoutButton = new JButton();
+	JPanel logoutButtonPanel = new JPanel();
+	
 	public void manageE() {
 		panelE.setSize(800, 250);
 		panelE.setLayout(new BorderLayout());
@@ -192,11 +195,12 @@ public class UserFrame extends JFrame{
 		
 		panelC.setSize(400, 700);
 		//panelC.setLayout(null);
-		panelC.setLayout(new GridLayout(4, 1));
+		panelC.setLayout(new GridLayout(5, 1));
 		panelC.add(addButtonPanel);//addButtonPanel addPc
 		panelC.add(editButtonPanel);//editProfile
 		panelC.add(activatePassChengeButtonPanel);//activatePassChangeButton
 		panelC.add(saveNewPassButtonPanel);//saveNewPassButton
+		panelC.add(logoutButtonPanel);
 		
 	}
 	public void manageD() {
@@ -288,13 +292,28 @@ public class UserFrame extends JFrame{
 	}
 	
 	// Managing the button for saving new workstation in the database.
-		public void manageSavePcButton() {
-			savePc.setText("Save new Pc");
-			savePc.setBackground(Color.green);
-			savePc.setFocusable(false);
-			savePc.addActionListener(new savePcListen());
-		}
+	public void manageSavePcButton() {
+		savePc.setText("Save new Pc");
+		savePc.setBackground(Color.green);
+		savePc.setFocusable(false);
+		savePc.addActionListener(new savePcListen());
+	}
 	
+	// Managing logout button
+	public void manageLogoutButton() {
+		logoutButton.setText("Log Out");
+		logoutButton.setBackground(Color.lightGray);
+		logoutButton.setFocusable(false);
+		logoutButton.addActionListener(e -> {
+			System.exit(0);
+		});
+	}
+	
+	// Managing "logut" button panel
+	public void manageLogoutButtonPanel() {
+		logoutButtonPanel.setSize(200, 50);
+		logoutButtonPanel.add(logoutButton);
+	}
 	
 	// Managing the panel for new workstation addition.
 	public void manageAddPcPanel() {
@@ -673,6 +692,8 @@ public class UserFrame extends JFrame{
 		manageModifyWS();
 		manageActivatePassChangeButtonPanel();
 		manageSaveNewPassButtonPanel();
+		manageLogoutButtonPanel();
+		manageLogoutButton();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");

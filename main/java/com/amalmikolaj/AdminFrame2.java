@@ -83,6 +83,12 @@ public class AdminFrame2 extends JFrame{
 	
 	JButton saveNewPassButton = new JButton();
 	JPanel saveNewPassButtonPanel = new JPanel();
+	
+	JButton pcAdminOptionsButton = new JButton();
+	JPanel pcAdminOptionsButtonPanel = new JPanel();
+	
+	JButton logoutButton = new JButton();
+	JPanel logoutButtonPanel = new JPanel();
 
 	public void manageE() {
 		panelE.setSize(800, 250);
@@ -170,10 +176,12 @@ public class AdminFrame2 extends JFrame{
 	public void manageC() {
 		
 		panelC.setSize(400, 700);
-		panelC.setLayout(new GridLayout(3, 1));
+		panelC.setLayout(new GridLayout(5, 1));
 		panelC.add(activatePassChengeButtonPanel);
 		panelC.add(saveNewPassButtonPanel);
 		panelC.add(deleteUserButtonPanel);
+		panelC.add(pcAdminOptionsButtonPanel);
+		panelC.add(logoutButtonPanel);
 		
 	}
 	
@@ -279,6 +287,37 @@ public class AdminFrame2 extends JFrame{
 	public void manageDeleteUserButtonPanel() {
 		deleteUserButtonPanel.setSize(200, 50);
 		deleteUserButtonPanel.add(deleteUserButton);
+	}
+	
+	public void managePcAdminOptionsButton() {
+		pcAdminOptionsButton.setText("<<< Workstations Manager");
+		pcAdminOptionsButton.setBackground(Color.white);
+		pcAdminOptionsButton.setFocusable(false);
+		pcAdminOptionsButton.addActionListener(e -> {
+			this.setVisible(false);
+			AdminFrame aFrame = new AdminFrame(this.mail);
+		});
+	}
+	
+	public void managePcAdminOptionsButtonPanel() {
+		pcAdminOptionsButtonPanel.setSize(200, 50);
+		pcAdminOptionsButtonPanel.add(pcAdminOptionsButton);
+	}
+	
+	// Managing logout button
+	public void manageLogoutButton() {
+		logoutButton.setText("Log Out");
+		logoutButton.setBackground(Color.lightGray);
+		logoutButton.setFocusable(false);
+		logoutButton.addActionListener(e -> {
+			System.exit(0);
+		});
+	}
+		
+	// Managing "logut" button panel
+	public void manageLogoutButtonPanel() {
+		logoutButtonPanel.setSize(200, 50);
+		logoutButtonPanel.add(logoutButton);
 	}
 	
 	//Manage some labels and text fields.
@@ -470,6 +509,10 @@ public class AdminFrame2 extends JFrame{
 		manageUnblock();
 		manageDeleteUserButtonPanel();
 		manageDeleteUserButton();
+		managePcAdminOptionsButton();
+		managePcAdminOptionsButtonPanel();
+		manageLogoutButton();
+		manageLogoutButtonPanel();
 		
 		this.setSize(1600, 700);
 	    this.setTitle("Our Workstations");
